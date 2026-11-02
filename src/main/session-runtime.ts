@@ -164,6 +164,7 @@ import { Web2termShell } from './web2term-shell'
 import type { Web2termSessionBinding } from './web2term-shell'
 import type { Web2termConnection } from './web2term-connection'
 import { normalizeTerminalNotesDirectory } from './terminal-notes'
+import { CHAT_ONLY_MODE } from '../shared/product-mode'
 
 const SETTING_EXECUTION_MODE = 'executionMode'
 const SETTING_LOCAL_NOTES = 'localTerminalNotes'
@@ -890,7 +891,7 @@ export class SessionRuntime {
         }
       }
     }
-    this.restoreBackgroundTasks()
+    if (!CHAT_ONLY_MODE) this.restoreBackgroundTasks()
     this.unsubscribeWindowsHelper = options.windowsHelper?.subscribe(() => this.refreshComputerUseCapabilities()) ?? null
     this.unregisterComputerUseTools = options.registerComputerUseTools?.(this.computerUseTool) ?? null
   }
@@ -4404,3 +4405,5 @@ export class SessionRuntime {
     }
   }
 }
+
+[executed on device: BWG (8d95c7ab-1c8e-462d-9b14-d6af2257a097)]
