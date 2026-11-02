@@ -17,6 +17,7 @@ import { appendFileSync, mkdirSync } from 'node:fs'
 import { randomUUID } from 'node:crypto'
 import { app, BrowserWindow, dialog, ipcMain, Menu, nativeImage, nativeTheme, powerMonitor, safeStorage, screen, session, shell, Tray } from 'electron'
 import { APP_NAME, configureAppIdentity } from './app-identity'
+import { CHAT_ONLY_MODE } from '../shared/product-mode'
 import { registerDesktopNotifications } from './desktop-notifications'
 import { openFocusHtmlPreview } from './focus-html-preview'
 import { configureWindowsAppDetails } from './windows-app-details'
@@ -797,7 +798,8 @@ async function applyEmbedProxy(proxies: Record<string, string>): Promise<void> {
    * that the values are separate, a partial application is a real thing the user asked for
    * rather than a bug, and the log below says which platform got what.
    */
-  for (const platform of CHAT_PLATFORMS) {
+  const platforms = CHAT_ONLY_MODE ? [CHATGPT_PLATFORM] : CHAT_PLATFORMS
+  for (const platform of platforms) {
     const proxy = proxies[platform.id] ?? ''
     const embedSession = session.fromPartition(platform.partition)
     try {
@@ -857,8 +859,9 @@ function applyAppTheme(theme: AppTheme): void {
 }
 
 function managedSessions(): ManagedSessionSummary[] {
-  return [...runtimes.values()]
+  const items = [...runtimes.values()]
     .map((runtime) => ({ ...runtime.summary(), unseenCompletedCount: unseenCompletedTasks.get(runtime.id) ?? 0 }))
+  return (CHAT_ONLY_MODE ? items.filter(item => item.kind === 'local' && item.platformId === CHATGPT_PLATFORM.id) : items)
     .sort((a, b) => a.createdAt - b.createdAt)
 }
 
@@ -1010,12 +1013,14 @@ function persistManagedSession(runtime: SessionRuntime): void {
 }
 /** The model a newly created chat starts on: the one picked in settings, else the registry default. */
 function newChatPlatform(): ChatPlatform {
-  return platformById(settings.defaultPlatformId) ?? platformById(DEFAULT_PLATFORM_ID) ?? CHATGPT_PLATFORM
+  return CHAT_ONLY_MODE ? CHATGPT_PLATFORM : platformById(settings.defaultPlatformId) ?? platformById(DEFAULT_PLATFORM_ID) ?? CHATGPT_PLATFORM
 }
 
 /** Seed project notes before any runtime opens a different directory or reconnects. */
 function inheritWorkspaceProjectNotes(conversationStore: ConversationStore): void {
-  const savedSessions = conversationStore.listManagedSessions()
+  const savedSessions = conversationStore.listManagedSessions().filter(session =>
+    !CHAT_ONLY_MODE || (session.platformId === CHATGPT_PLATFORM.id && !session.sshAttached && !session.sshHostId
+      && !parseWeb2termBinding(conversationStore.getSetting(`web2termSession:${session.id}`))))
   for (const project of conversationStore.listWorkspaceProjects()) {
     const targets: Array<{ scope: 'local' | 'ssh'; hostId: string; directory: string }> = [
       { scope: 'local', hostId: localMachineId, directory: project.directory }
@@ -1041,21 +1046,22 @@ function createSession(
 ): SessionRuntime | null {
   if (!store) return null
   const binding = web2termBinding ?? (restored ? parseWeb2termBinding(store.getSetting(`web2termSession:${restored.id}`)) : null)
+  if (CHAT_ONLY_MODE && (kind !== 'local' || platform.id !== CHATGPT_PLATFORM.id || binding || restored?.sshAttached || restored?.sshHostId)) return null
   if (binding && !web2termConnection) return null
   const savedMode = store.getSetting(SETTING_EXECUTION_MODE)
-  const initialMode: ExecutionMode = savedMode === 'auto' ? 'auto' : 'manual'
+  const initialMode: ExecutionMode = !CHAT_ONLY_MODE && savedMode === 'auto' ? 'auto' : 'manual'
   let runtime: SessionRuntime | null = null
   runtime = new SessionRuntime({
     onCompactionTarget: createCompactionTarget,
     onCompactionTargetOpen: id => { selectSession(id) },
-    qqMail: qqMail ?? undefined,
-    scheduledTasks: scheduledTasks ?? undefined,
-    windowsHelper,
-    automationBlocked: () => emergencyStop.isActive(),
-    onAutomationSafetyChanged: () => emergencyStop.refresh(),
-    computerUseObservations: desktopObservations,
-    desktopCoordinator,
-    registerComputerUseTools: tool => {
+    qqMail: CHAT_ONLY_MODE ? undefined : qqMail ?? undefined,
+    scheduledTasks: CHAT_ONLY_MODE ? undefined : scheduledTasks ?? undefined,
+    windowsHelper: CHAT_ONLY_MODE ? undefined : windowsHelper,
+    automationBlocked: CHAT_ONLY_MODE ? undefined : () => emergencyStop.isActive(),
+    onAutomationSafetyChanged: CHAT_ONLY_MODE ? undefined : () => emergencyStop.refresh(),
+    computerUseObservations: CHAT_ONLY_MODE ? undefined : desktopObservations,
+    desktopCoordinator: CHAT_ONLY_MODE ? undefined : desktopCoordinator,
+    registerComputerUseTools: CHAT_ONLY_MODE ? undefined : tool => {
       const unregisterApps = windowsApps.register(tool)
       try {
         const unregisterWindows = desktopWindows.register(tool)
@@ -1073,13 +1079,13 @@ function createSession(
     projectId: restored?.projectId ?? creation?.projectId ?? null,
     initialUrl: restored?.url || undefined,
     initialConversationId: restored?.conversationId ?? null,
-    initialPaused: restored?.paused ?? false,
-    initialPromptInjectionEnabled: restored?.promptInjectionEnabled ?? true,
+    initialPaused: CHAT_ONLY_MODE ? true : restored?.paused ?? false,
+    initialPromptInjectionEnabled: CHAT_ONLY_MODE ? false : restored?.promptInjectionEnabled ?? true,
     initialLocalCwd: restored?.localCwd ?? creation?.localCwd ?? '',
-    initialSshHostId: restored?.sshHostId ?? '',
-    initialSshAttached: restored?.sshAttached ?? false,
-    initialSshReconnect: restored?.sshReconnect ?? false,
-    initialSshCwd: restored?.sshCwd ?? '',
+    initialSshHostId: CHAT_ONLY_MODE ? '' : restored?.sshHostId ?? '',
+    initialSshAttached: CHAT_ONLY_MODE ? false : restored?.sshAttached ?? false,
+    initialSshReconnect: CHAT_ONLY_MODE ? false : restored?.sshReconnect ?? false,
+    initialSshCwd: CHAT_ONLY_MODE ? '' : restored?.sshCwd ?? '',
     initialSendDelaySeconds: restored?.sendDelaySeconds,
     initialSendDelayCustomized: restored?.sendDelayCustomized,
     store,
@@ -1245,7 +1251,7 @@ function createManagerWindow(): void {
   })
   configureWindowsAppDetails(window)
   managerWindow = window
-  createComputerUseOverlay(window)
+  if (!CHAT_ONLY_MODE) createComputerUseOverlay(window)
   managerReadyToShow = false
   window.once('ready-to-show', () => {
     managerReadyToShow = true
@@ -1442,7 +1448,9 @@ function registerIpcHandlers(): void {
     IpcChannels.managerSessionCreate,
     (event, kind: string, projectId?: string | null): ManagedSessionSummary | null => {
       if (!fromManager(event)) return null
+      if (CHAT_ONLY_MODE && kind !== 'local') return null
       const creation = workspaceSessionOptions(kind === 'ssh' ? 'ssh' : 'local', projectId, store?.listWorkspaceProjects() ?? [])
+      if (CHAT_ONLY_MODE) creation.localCwd = ''
       /*
        * No platform parameter: a session is created for a purpose (this machine, or a host over
        * SSH) and the model is switched inside the chat. It starts on the model chosen in
@@ -1533,7 +1541,7 @@ function registerIpcHandlers(): void {
      * the switch button doing nothing.
      */
     const platform = platformById(String(platformId ?? ''))
-    if (!platform) return false
+    if (!platform || (CHAT_ONLY_MODE && platform.id !== CHATGPT_PLATFORM.id)) return false
     const switched = runtime.switchPlatform(platform.id)
     // Persist immediately: the stored platformId/url is what a restart reopens, and a switch
     // that is not written back would come back as the old site.
@@ -2389,7 +2397,7 @@ async function initializeApplication(): Promise<void> {
       send: (task, run, signal) => runtimes.get(task.owner.sessionId)?.sendScheduledTask(task, run, signal) ?? Promise.resolve({ outcome: 'unavailable' }),
       changed: sessionId => runtimes.get(sessionId)?.scheduledTasksChanged()
     })
-    powerMonitor.on('resume', () => scheduledTasks?.wake())
+    if (!CHAT_ONLY_MODE) powerMonitor.on('resume', () => scheduledTasks?.wake())
     localMachineId = conversationStore.getSetting(SETTING_LOCAL_MACHINE_ID) ?? ''
     if (localMachineId === '') {
       localMachineId = randomUUID()
@@ -2404,46 +2412,48 @@ async function initializeApplication(): Promise<void> {
       ...readComputerUsePreferences(conversationStore),
       theme: conversationStore.getSetting(SETTING_THEME) === 'dark' ? 'dark' : 'light',
       ...backendSettings,
-      softwareProxy: readSoftwareProxy(conversationStore.getSetting(SETTING_SOFTWARE_PROXY)),
+      softwareProxy: CHAT_ONLY_MODE ? '' : readSoftwareProxy(conversationStore.getSetting(SETTING_SOFTWARE_PROXY)),
       embedProxy: readEmbedProxies(conversationStore),
-      sshProxy: conversationStore.getSetting(SETTING_SSH_PROXY) ?? '',
-      updateProxy: conversationStore.getSetting(SETTING_UPDATE_PROXY) ?? '',
+      sshProxy: CHAT_ONLY_MODE ? '' : conversationStore.getSetting(SETTING_SSH_PROXY) ?? '',
+      updateProxy: CHAT_ONLY_MODE ? '' : conversationStore.getSetting(SETTING_UPDATE_PROXY) ?? '',
       userAvatarDataUrl: conversationStore.getSetting(SETTING_USER_AVATAR) ?? '',
       userAvatarSourceDataUrl: conversationStore.getSetting(SETTING_USER_AVATAR_SOURCE) ?? conversationStore.getSetting(SETTING_USER_AVATAR) ?? '',
       userAvatarPositionX: readAvatarPosition(conversationStore.getSetting(SETTING_USER_AVATAR_POSITION_X)),
       userAvatarPositionY: readAvatarPosition(conversationStore.getSetting(SETTING_USER_AVATAR_POSITION_Y)),
       userAvatarScale: readAvatarScale(conversationStore.getSetting(SETTING_USER_AVATAR_SCALE)),
-      defaultPlatformId: platformById(conversationStore.getSetting(SETTING_DEFAULT_PLATFORM) ?? '')?.id ?? DEFAULT_PLATFORM_ID,
-      defaultChatView: readDefaultChatView(conversationStore.getSetting(SETTING_DEFAULT_CHAT_VIEW))
+      defaultPlatformId: CHAT_ONLY_MODE ? CHATGPT_PLATFORM.id : platformById(conversationStore.getSetting(SETTING_DEFAULT_PLATFORM) ?? '')?.id ?? DEFAULT_PLATFORM_ID,
+      defaultChatView: CHAT_ONLY_MODE ? 'original' : readDefaultChatView(conversationStore.getSetting(SETTING_DEFAULT_CHAT_VIEW))
     }
     await applySoftwareProxy(settings.softwareProxy)
     if (quitting) return
-    backendAuth = new BackendAuthService(conversationStore, {
-      request: softwareFetch,
-      encrypt(value) {
-        if (!safeStorage.isEncryptionAvailable()) throw new Error('Encryption unavailable')
-        return safeStorage.encryptString(value).toString('base64')
-      },
-      decrypt(value) {
-        if (!safeStorage.isEncryptionAvailable()) throw new Error('Encryption unavailable')
-        return safeStorage.decryptString(Buffer.from(value, 'base64'))
-      },
-      onBackendUrlSaved: setBackendUrlState,
-      onLoginChanged: () => web2termConnection?.credentialsChanged()
-    })
-    web2termConnection = new Web2termConnection(conversationStore, backendAuth, {
-      createSocket: createSoftwareSocket,
-      changed(state) {
-        if (managerWindow && !managerWindow.isDestroyed()) managerWindow.webContents.send(IpcChannels.web2termChanged, state)
-        for (const runtime of runtimes.values()) queueMicrotask(() => runtime.web2term?.sync())
-      },
-      terminalsChanged(state) {
-        if (managerWindow && !managerWindow.isDestroyed()) managerWindow.webContents.send(IpcChannels.web2termTerminalsChanged, state)
-      },
-      terminalOutput(output) {
-        if (managerWindow && !managerWindow.isDestroyed()) managerWindow.webContents.send(IpcChannels.web2termTerminalOutput, output)
-      }
-    })
+    if (!CHAT_ONLY_MODE) {
+      backendAuth = new BackendAuthService(conversationStore, {
+        request: softwareFetch,
+        encrypt(value) {
+          if (!safeStorage.isEncryptionAvailable()) throw new Error('Encryption unavailable')
+          return safeStorage.encryptString(value).toString('base64')
+        },
+        decrypt(value) {
+          if (!safeStorage.isEncryptionAvailable()) throw new Error('Encryption unavailable')
+          return safeStorage.decryptString(Buffer.from(value, 'base64'))
+        },
+        onBackendUrlSaved: setBackendUrlState,
+        onLoginChanged: () => web2termConnection?.credentialsChanged()
+      })
+      web2termConnection = new Web2termConnection(conversationStore, backendAuth, {
+        createSocket: createSoftwareSocket,
+        changed(state) {
+          if (managerWindow && !managerWindow.isDestroyed()) managerWindow.webContents.send(IpcChannels.web2termChanged, state)
+          for (const runtime of runtimes.values()) queueMicrotask(() => runtime.web2term?.sync())
+        },
+        terminalsChanged(state) {
+          if (managerWindow && !managerWindow.isDestroyed()) managerWindow.webContents.send(IpcChannels.web2termTerminalsChanged, state)
+        },
+        terminalOutput(output) {
+          if (managerWindow && !managerWindow.isDestroyed()) managerWindow.webContents.send(IpcChannels.web2termTerminalOutput, output)
+        }
+      })
+    }
     /*
      * Before workspace windows or embedded views exist, so their first paint has
      * the saved theme. The already-visible splash follows the same media change.
@@ -2470,7 +2480,13 @@ async function initializeApplication(): Promise<void> {
     startUpdateSchedule()
     const savedWorkspaceSessionId = conversationStore.getSetting(SETTING_WORKSPACE_SESSION_ID) ?? ''
     const savedWorkspaceOpenSshDialog = conversationStore.getSetting(SETTING_WORKSPACE_OPEN_SSH_DIALOG) === '1'
-    const savedSessions = conversationStore.listManagedSessions()
+    const savedSessions = conversationStore.listManagedSessions().filter(savedSession =>
+      !CHAT_ONLY_MODE || (
+        savedSession.platformId === CHATGPT_PLATFORM.id
+        && !savedSession.sshAttached
+        && !savedSession.sshHostId
+        && !parseWeb2termBinding(conversationStore.getSetting(`web2termSession:${savedSession.id}`))
+      ))
     inheritWorkspaceProjectNotes(conversationStore)
     for (const savedSession of savedSessions) {
         // Restore each session onto the site it was created on. An id this build does not
@@ -2480,9 +2496,9 @@ async function initializeApplication(): Promise<void> {
         createSession('local', false, savedSession, platform)
     }
 
-    restoreWorkspaceSelection(savedWorkspaceSessionId, savedWorkspaceOpenSshDialog)
+    restoreWorkspaceSelection(savedWorkspaceSessionId, CHAT_ONLY_MODE ? false : savedWorkspaceOpenSshDialog)
     notificationActivations.markReady()
-    scheduledTasks.start()
+    if (!CHAT_ONLY_MODE) scheduledTasks.start()
 
     if (web2termConnection) {
       const count = restoreWeb2termSessions(web2termConnection,
@@ -2548,3 +2564,5 @@ app.on('will-quit', () => {
   store?.close()
   store = null
 })
+
+[executed on device: BWG (8d95c7ab-1c8e-462d-9b14-d6af2257a097)]
