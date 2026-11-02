@@ -131,7 +131,7 @@ export default function WorkspaceNavigation({ sessions, projects, activeId, them
       </div>
       {projects.map(project => <section className="workspace-navigation__project" key={project.id} onDragOver={dragOver} onDrop={event => drop(event, project.id)}>
         <div className="workspace-navigation__project-head">
-          <button type="button" className="workspace-navigation__folder" title={project.directory ? `${project.name}\n${project.directory}` : `${project.name}\n默认目录`}
+          <button type="button" className="workspace-navigation__folder" title={project.name}
             aria-expanded={!collapsed[project.id]} aria-controls={`workspace-project-${project.id}`}
             onClick={() => setCollapsed(current => ({ ...current, [project.id]: !current[project.id] }))}>
             <Icon kind={collapsed[project.id] ? 'folder' : 'open'} /><span className="workspace-navigation__title">{project.name}</span>
@@ -152,8 +152,8 @@ export default function WorkspaceNavigation({ sessions, projects, activeId, them
       </section>)}
       <section className="workspace-navigation__ungrouped" aria-labelledby="workspace-local-chats-heading" onDragOver={dragOver} onDrop={event => drop(event, null)}>
         <div className="workspace-navigation__section-head">
-          <h2 id="workspace-local-chats-heading">本电脑</h2>
-          <button type="button" ref={newChatButton} className="workspace-navigation__icon" disabled={creating} aria-label="在本电脑中新建聊天" title="新建聊天"
+          <h2 id="workspace-local-chats-heading">聊天记录</h2>
+          <button type="button" ref={newChatButton} className="workspace-navigation__icon" disabled={creating} aria-label="新建聊天" title="新建聊天"
             onClick={() => onNewChat(null)}><Icon kind="plus" /></button>
         </div>
         {ungrouped.map(row)}
@@ -162,3 +162,5 @@ export default function WorkspaceNavigation({ sessions, projects, activeId, them
     {error || status ? <p className="workspace-navigation__error" role="alert">{error || status}</p> : null}
   </div>
 }
+
+[executed on device: BWG (8d95c7ab-1c8e-462d-9b14-d6af2257a097)]
