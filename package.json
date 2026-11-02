@@ -3,7 +3,7 @@
   "productName": "Web2Term",
   "version": "0.1.214",
   "private": true,
-  "description": "React + Electron desktop application (electron-vite + TypeScript)",
+  "description": "Local-first ChatGPT desktop client with per-device workspace and proxy settings",
   "license": "MIT",
   "main": "./out/main/index.js",
   "config": {
@@ -85,3 +85,5 @@
     "vite": "^7.3.6"
   }
 }
+
+[executed on device: BWG (8d95c7ab-1c8e-462d-9b14-d6af2257a097)]
