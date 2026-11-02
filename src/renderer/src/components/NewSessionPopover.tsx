@@ -3,6 +3,7 @@ import type { ReactElement } from 'react'
 import { Popover } from '@base-ui/react/popover'
 import type { WorkspaceProject } from '@shared/types'
 import AppPopover from './AppPopover'
+import { CHAT_ONLY_MODE } from '@shared/product-mode'
 import './NewSessionPopover.css'
 
 interface Props {
@@ -40,23 +41,34 @@ export default function NewSessionPopover({ project, anchor, busy, error, onClos
         </button>
       </div>
       <div className="new-chat-picker__options">
-        <button type="button" ref={localButton} disabled={busy} className="new-chat-picker__option" title={project?.directory || '使用默认目录'} onClick={() => onCreate('local')}>
-          <TerminalIcon kind="local" />
-          <span className="new-chat-picker__label"><strong>本地终端</strong><small>{project?.directory ? '使用项目目录' : '使用默认目录'}</small></span>
-        </button>
-        <button type="button" disabled={busy} className="new-chat-picker__option" onClick={() => onCreate('ssh')}>
-          <TerminalIcon kind="ssh" />
-          <span className="new-chat-picker__label"><strong>SSH 连接</strong><small>连接远程主机</small></span>
-          <NextIcon />
-        </button>
-        <button type="button" disabled={busy} className="new-chat-picker__option" onClick={event => onWeb2term(event.currentTarget)}>
-          <TerminalIcon kind="web2term" />
-          <span className="new-chat-picker__label"><strong>web2term</strong><small>选择账号下的设备</small></span>
-          <NextIcon />
-        </button>
+        {CHAT_ONLY_MODE ? (
+          <button type="button" ref={localButton} disabled={busy} className="new-chat-picker__option" onClick={() => onCreate('local')}>
+            <TerminalIcon kind="local" />
+            <span className="new-chat-picker__label"><strong>ChatGPT 聊天</strong><small>聊天记录仅保存在这台电脑</small></span>
+          </button>
+        ) : (
+          <>
+            <button type="button" ref={localButton} disabled={busy} className="new-chat-picker__option" title={project?.directory || '使用默认目录'} onClick={() => onCreate('local')}>
+              <TerminalIcon kind="local" />
+              <span className="new-chat-picker__label"><strong>本地终端</strong><small>{project?.directory ? '使用项目目录' : '使用默认目录'}</small></span>
+            </button>
+            <button type="button" disabled={busy} className="new-chat-picker__option" onClick={() => onCreate('ssh')}>
+              <TerminalIcon kind="ssh" />
+              <span className="new-chat-picker__label"><strong>SSH 连接</strong><small>连接远程主机</small></span>
+              <NextIcon />
+            </button>
+            <button type="button" disabled={busy} className="new-chat-picker__option" onClick={event => onWeb2term(event.currentTarget)}>
+              <TerminalIcon kind="web2term" />
+              <span className="new-chat-picker__label"><strong>web2term</strong><small>选择账号下的设备</small></span>
+              <NextIcon />
+            </button>
+          </>
+        )}
       </div>
       {busy ? <p className="new-chat-picker__status" role="status">正在创建对话…</p> : null}
       {error ? <p className="new-chat-picker__error" role="alert">{error}</p> : null}
     </div>
   </AppPopover>
 }
+
+[executed on device: BWG (8d95c7ab-1c8e-462d-9b14-d6af2257a097)]
