@@ -51,11 +51,11 @@ import type { IApi as FilemanagerApi, IEntity as FilemanagerEntity } from '@svar
 import type { CSSProperties, FormEvent, JSX, PointerEvent as ReactPointerEvent } from 'react'
 import { SESSION_COOKIE_NAME, isQuestionPayload, canEditTerminalNotes, terminalNotesOwnerKey } from '@shared/types'
 import { DEFAULT_BACKEND_URL, normalizeBackendUrl } from '@shared/backend-url'
-import { DEFAULT_SOFTWARE_PROXY, normalizeSoftwareProxy } from '@shared/software-proxy'
 import { sshWorkingDirectory } from '@shared/ssh-directory'
 import { isPdfPath } from '@shared/pdf-preview'
 import './components/CommandViewer.css'
 import { CHAT_PLATFORMS } from '@shared/platforms'
+import { CHAT_ONLY_MODE } from '@shared/product-mode'
 import type {
   AppTheme,
   AppSettings,
@@ -110,7 +110,7 @@ function adjacentPanelTab(ids: PanelTab[], removed: PanelTab, remaining = ids.fi
     ?? 'terminal'
 }
 
-const SETTINGS_SECTIONS = [
+const ALL_SETTINGS_SECTIONS = [
   { id: 'appearance', label: '外观' },
   { id: 'chat', label: '对话' },
   { id: 'backend', label: '后端服务' },
@@ -121,7 +121,52 @@ const SETTINGS_SECTIONS = [
   { id: 'session', label: '浏览器登录态' }
 ] as const
 
-type SettingsSection = (typeof SETTINGS_SECTIONS)[number]['id']
+const SETTINGS_SECTIONS = CHAT_ONLY_MODE
+  ? ALL_SETTINGS_SECTIONS.filter(section => (['appearance', 'proxy', 'updates'] as string[]).includes(section.id))
+  : ALL_SETTINGS_SECTIONS
+
+type SettingsSection = (typeof ALL_SETTINGS_SECTIONS)[number]['id']
+
+type ChatProxyProtocol = 'http' | 'https' | 'socks5'
+interface ChatProxyDraft {
+  enabled: boolean
+  protocol: ChatProxyProtocol
+  host: string
+  port: string
+}
+const EMPTY_CHAT_PROXY_DRAFT: ChatProxyDraft = { enabled: false, protocol: 'http', host: '', port: '' }
+
+function parseChatProxyDraft(raw: string): ChatProxyDraft {
+  const value = raw.trim()
+  if (!value) return { ...EMPTY_CHAT_PROXY_DRAFT }
+  try {
+    const url = new URL(/^[a-z][a-z0-9+.-]*:\/\//iu.test(value) ? value : 'http://' + value)
+    const protocol: ChatProxyProtocol = url.protocol === 'https:' ? 'https' : url.protocol === 'socks5:' ? 'socks5' : 'http'
+    const defaultPort = protocol === 'http' ? '80' : protocol === 'https' ? '443' : '1080'
+    if (!url.hostname || url.username || url.password || url.pathname !== '/' || url.search || url.hash) {
+      return { enabled: true, protocol, host: url.hostname || value, port: url.port }
+    }
+    return { enabled: true, protocol, host: url.hostname, port: url.port || defaultPort }
+  } catch {
+    return { enabled: true, protocol: 'http', host: value, port: '' }
+  }
+}
+
+function serializeChatProxyDraft(draft: ChatProxyDraft): string {
+  if (!draft.enabled) return ''
+  const host = draft.host.trim()
+  const portText = draft.port.trim()
+  const port = Number(portText)
+  if (!host || !/^\d{1,5}$/u.test(portText) || !Number.isInteger(port) || port < 1 || port > 65535) {
+    throw new Error('请填写有效的代理 IP（或域名）和 1–65535 范围内的端口。')
+  }
+  const authorityHost = host.startsWith('[') && host.endsWith(']') ? host : host.includes(':') ? '[' + host + ']' : host
+  let url: URL
+  try { url = new URL(draft.protocol + '://' + authorityHost + ':' + port) }
+  catch { throw new Error('代理 IP 或域名格式不正确。') }
+  if (!url.hostname || url.username || url.password || url.pathname !== '/') throw new Error('代理地址格式不正确。')
+  return draft.protocol + '://' + url.host
+}
 
 function SettingsSectionIcon({ section }: { section: SettingsSection }): JSX.Element {
   return (
@@ -155,6 +200,7 @@ function sessionLayoutKey(key: string, sessionId: string): string {
 }
 
 function readChatView(sessionId: string, platformId: string, fallback: ChatView = DEFAULT_CHAT_VIEW): ChatView {
+  if (CHAT_ONLY_MODE) return 'original'
   try {
     const view = localStorage.getItem('chat.view.' + sessionId + '.' + platformId)
     if (view === 'local' || view === 'original') return view
@@ -546,7 +592,8 @@ export default function App({ sessionId, sessionKind, initialSshDialogOpen = fal
   const [userAvatarPositionYDraft, setUserAvatarPositionYDraft] = useState(50)
   const [userAvatarScaleDraft, setUserAvatarScaleDraft] = useState(1)
   const [avatarEditorOpen, setAvatarEditorOpen] = useState(false)
-  const [proxyDrafts, setProxyDrafts] = useState<Record<string, string>>({})
+  const [chatProxyDraft, setChatProxyDraft] = useState<ChatProxyDraft>({ ...EMPTY_CHAT_PROXY_DRAFT })
+  const [chatProxyError, setChatProxyError] = useState('')
   const [themeDraft, setThemeDraft] = useState<AppTheme>('light')
   const [savingSettings, setSavingSettings] = useState(false)
   /**
@@ -655,11 +702,6 @@ export default function App({ sessionId, sessionKind, initialSshDialogOpen = fal
     password: '',
     proxy: ''
   })
-  const [sshProxyDraft, setSshProxyDraft] = useState('')
-  const [softwareProxyDraft, setSoftwareProxyDraft] = useState(DEFAULT_SOFTWARE_PROXY)
-  const [softwareProxyError, setSoftwareProxyError] = useState('')
-  const softwareProxyInputRef = useRef<HTMLInputElement>(null)
-  const [updateProxyDraft, setUpdateProxyDraft] = useState('')
   const [defaultPlatformDraft, setDefaultPlatformDraft] = useState('')
   const [defaultChatViewDraft, setDefaultChatViewDraft] = useState<ChatView>(DEFAULT_CHAT_VIEW)
   const [updateStatus, setUpdateStatus] = useState<UpdateStatus | null>(null)
@@ -1901,12 +1943,9 @@ export default function App({ sessionId, sessionKind, initialSshDialogOpen = fal
         setSettings(value)
         setBackendUrlDraft(value.backendUrl ?? '')
         setForceDefaultBackendUrlDraft(value.forceDefaultBackendUrl ?? true)
-        setProxyDrafts(value.embedProxy ?? {})
+        setChatProxyDraft(parseChatProxyDraft(value.embedProxy?.chatgpt ?? ''))
+        setChatProxyError('')
         setThemeDraft(value.theme)
-        setSshProxyDraft(value.sshProxy)
-        setSoftwareProxyDraft(value.softwareProxy ?? DEFAULT_SOFTWARE_PROXY)
-        setSoftwareProxyError('')
-        setUpdateProxyDraft(value.updateProxy)
         setDefaultPlatformDraft(value.defaultPlatformId)
         setDefaultChatViewDraft(value.defaultChatView ?? DEFAULT_CHAT_VIEW)
         setUserAvatarDraft(value.userAvatarDataUrl)
@@ -2200,7 +2239,7 @@ export default function App({ sessionId, sessionKind, initialSshDialogOpen = fal
     if (savingSettings || backendLoginBusy || settingsOperationBusy || settingsLoading || settingsLoadFailed || settings === null) return
     let backendUrl: string
     try {
-      backendUrl = forceDefaultBackendUrlDraft ? DEFAULT_BACKEND_URL : normalizeBackendUrl(backendUrlDraft)
+      backendUrl = CHAT_ONLY_MODE || forceDefaultBackendUrlDraft ? DEFAULT_BACKEND_URL : normalizeBackendUrl(backendUrlDraft)
     } catch (error) {
       setBackendUrlError(error instanceof Error ? error.message : '后端地址无效，请检查后重试。')
       setSettingsSection('backend')
@@ -2209,16 +2248,16 @@ export default function App({ sessionId, sessionKind, initialSshDialogOpen = fal
     }
     setBackendUrlError('')
     setSettingsError('')
-    let softwareProxy: string
+    const softwareProxy = ''
+    let embedProxy: Record<string, string>
     try {
-      softwareProxy = normalizeSoftwareProxy(softwareProxyDraft)
+      embedProxy = { chatgpt: serializeChatProxyDraft(chatProxyDraft) }
+      setChatProxyError('')
     } catch (error) {
-      setSoftwareProxyError(error instanceof Error ? error.message : '软件代理地址无效，请检查后重试。')
+      setChatProxyError(error instanceof Error ? error.message : '代理地址无效，请检查 IP 和端口。')
       setSettingsSection('proxy')
-      requestAnimationFrame(() => softwareProxyInputRef.current?.focus())
       return
     }
-    setSoftwareProxyError('')
     let avatarDataUrl = userAvatarDraft
     if (!userAvatarSourceDraft) avatarDataUrl = ''
     else if (userAvatarEditorRef.current) avatarDataUrl = userAvatarEditorRef.current.getImageScaledToCanvas().toDataURL('image/png')
@@ -2229,13 +2268,13 @@ export default function App({ sessionId, sessionKind, initialSshDialogOpen = fal
       const next = await window.api.updateSettings({
         theme: themeDraft,
         backendUrl,
-        forceDefaultBackendUrl: forceDefaultBackendUrlDraft,
-        embedProxy: proxyDrafts,
-        sshProxy: sshProxyDraft,
+        forceDefaultBackendUrl: CHAT_ONLY_MODE ? true : forceDefaultBackendUrlDraft,
+        embedProxy,
+        sshProxy: '',
         softwareProxy,
-        updateProxy: updateProxyDraft,
-        defaultPlatformId: defaultPlatformDraft,
-        defaultChatView: defaultChatViewDraft,
+        updateProxy: '',
+        defaultPlatformId: CHAT_ONLY_MODE ? 'chatgpt' : defaultPlatformDraft,
+        defaultChatView: CHAT_ONLY_MODE ? 'original' : defaultChatViewDraft,
         userAvatarDataUrl: avatarDataUrl,
         userAvatarSourceDataUrl: userAvatarSourceDraft,
         userAvatarPositionX: userAvatarPositionXDraft,
@@ -2247,10 +2286,8 @@ export default function App({ sessionId, sessionKind, initialSshDialogOpen = fal
       setForceDefaultBackendUrlDraft(next.forceDefaultBackendUrl)
       onThemeChange(next.theme)
       setThemeDraft(next.theme)
-      setProxyDrafts(next.embedProxy ?? {})
-      setSshProxyDraft(next.sshProxy)
-      setSoftwareProxyDraft(next.softwareProxy)
-      setUpdateProxyDraft(next.updateProxy)
+      setChatProxyDraft(parseChatProxyDraft(next.embedProxy?.chatgpt ?? ''))
+      setChatProxyError('')
       setDefaultPlatformDraft(next.defaultPlatformId)
       setDefaultChatViewDraft(next.defaultChatView ?? DEFAULT_CHAT_VIEW)
       setUserAvatarDraft(next.userAvatarDataUrl)
@@ -2265,7 +2302,7 @@ export default function App({ sessionId, sessionKind, initialSshDialogOpen = fal
     } finally {
       setSavingSettings(false)
     }
-  }, [onThemeChange, backendUrlDraft, forceDefaultBackendUrlDraft, savingSettings, backendLoginBusy, settingsOperationBusy, settings, settingsLoading, settingsLoadFailed, proxyDrafts, sshProxyDraft, softwareProxyDraft, themeDraft, updateProxyDraft, defaultPlatformDraft, defaultChatViewDraft, userAvatarDraft, userAvatarSourceDraft, userAvatarPositionXDraft, userAvatarPositionYDraft, userAvatarScaleDraft])
+  }, [onThemeChange, backendUrlDraft, forceDefaultBackendUrlDraft, savingSettings, backendLoginBusy, settingsOperationBusy, settings, settingsLoading, settingsLoadFailed, chatProxyDraft, themeDraft, defaultPlatformDraft, defaultChatViewDraft, userAvatarDraft, userAvatarSourceDraft, userAvatarPositionXDraft, userAvatarPositionYDraft, userAvatarScaleDraft])
 
   /** Drag the shared sidebar's left edge to resize it. */
   const startPanelResize = useCallback(
@@ -2323,7 +2360,7 @@ export default function App({ sessionId, sessionKind, initialSshDialogOpen = fal
   }
 
   return (
-    <div ref={setAppContainer} className={'app' + (panelCollapsed ? ' app--panel-collapsed' : '') + (isFocusView ? ' app--focus' : '')} style={{ '--panel-width': `${panelWidth}px` } as CSSProperties}>
+    <div ref={setAppContainer} className={'app' + (panelCollapsed ? ' app--panel-collapsed' : '') + (isFocusView ? ' app--focus' : '') + (CHAT_ONLY_MODE ? ' app--chat-only' : '')} style={{ '--panel-width': `${panelWidth}px` } as CSSProperties}>
       <header className="topbar">
         <div className="brand">
           <span className="brand__mark" aria-hidden="true">
@@ -2433,7 +2470,7 @@ export default function App({ sessionId, sessionKind, initialSshDialogOpen = fal
             type="button"
             title="设置"
             aria-label="设置"
-            className={Object.values(settings?.embedProxy ?? {}).some((value) => value.trim() !== '') ? 'toolbar__settings toolbar__settings--on' : 'toolbar__settings'}
+            className={(settings?.embedProxy?.chatgpt ?? '').trim() !== '' ? 'toolbar__settings toolbar__settings--on' : 'toolbar__settings'}
             onClick={() => setSettingsOpen((value) => !value)}
           >
             ⚙
@@ -3910,71 +3947,59 @@ ${record.command}`
                     <h2>网络代理</h2>
                   </div>
 
-                  <div className="settings-software-proxy">
-                    <div className="settings-proxy-row">
-                      <label className="settings-proxy-row__label" htmlFor="settings-software-proxy">软件代理</label>
-                      <input id="settings-software-proxy" ref={softwareProxyInputRef} className="address__input settings-input"
-                        value={softwareProxyDraft} spellCheck={false} placeholder={DEFAULT_SOFTWARE_PROXY}
-                        aria-invalid={Boolean(softwareProxyError)} aria-describedby={`settings-software-proxy-hint${softwareProxyError ? ' settings-software-proxy-error' : ''}`}
-                        onChange={(event) => { setSoftwareProxyDraft(event.target.value); setSoftwareProxyError('') }} />
-                      <span className={`settings-state ${softwareProxyDraft.trim() ? 'settings-state--ok' : ''}`}><i />{softwareProxyDraft.trim() ? '已配置' : '直连'}</span>
-                      <button type="button" className="settings-copy" aria-label="复制软件代理" disabled={!softwareProxyDraft.trim()} onClick={() => void navigator.clipboard.writeText(softwareProxyDraft)}>
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2" /><path d="M16 8V4H4v12h4" /></svg>
-                      </button>
-                    </div>
-                    <p id="settings-software-proxy-hint" className="settings-backend-hint">用于更新说明、后端登录、设备查询和连接。支持 HTTP / HTTPS，留空直连；保存后生效，已连接的设备在下次重连时使用新配置。</p>
-                    {softwareProxyError ? <p id="settings-software-proxy-error" className="settings-feedback" role="alert">{softwareProxyError}</p> : null}
-                  </div>
-
-                  {/*
-                    One row per platform, generated from the descriptor list rather than written
-                    out three times — a fourth site then needs no change here at all.
-                  */}
-                  {CHAT_PLATFORMS.map((platform) => {
-                    const value = proxyDrafts[platform.id] ?? ''
-                    const setValue = (next: string): void =>
-                      setProxyDrafts((current) => ({ ...current, [platform.id]: next }))
-                    return (
-                      <div className="settings-proxy-row" key={platform.id}>
-                        <label className="settings-proxy-row__label">
-                          {platform.label} 代理 <span className="settings-help">?</span>
+                  <div className="settings-chat-proxy">
+                    <label className="settings-chat-proxy__enabled">
+                      <input
+                        type="checkbox"
+                        checked={chatProxyDraft.enabled}
+                        onChange={event => { setChatProxyDraft(current => ({ ...current, enabled: event.target.checked })); setChatProxyError('') }}
+                      />
+                      <span>启用 ChatGPT 代理</span>
+                    </label>
+                    <span className={chatProxyDraft.enabled ? 'settings-state settings-state--ok' : 'settings-state'}>
+                      <i />{chatProxyDraft.enabled ? '已启用' : '直连'}
+                    </span>
+                    {chatProxyDraft.enabled ? (
+                      <div className="settings-chat-proxy__fields">
+                        <label>
+                          <span>代理协议</span>
+                          <select
+                            className="settings-theme-select"
+                            value={chatProxyDraft.protocol}
+                            onChange={event => { setChatProxyDraft(current => ({ ...current, protocol: event.target.value as ChatProxyProtocol })); setChatProxyError('') }}
+                          >
+                            <option value="http">HTTP</option>
+                            <option value="https">HTTPS</option>
+                            <option value="socks5">SOCKS5</option>
+                          </select>
                         </label>
-                        <input
-                          className="address__input settings-input"
-                          value={value}
-                          spellCheck={false}
-                          placeholder="http://127.0.0.1:7897"
-                          onChange={(event) => setValue(event.target.value)}
-                        />
-                        <span className={`settings-state ${value.trim() ? 'settings-state--ok' : ''}`}>
-                          <i />
-                          {value.trim() ? '已配置' : '未配置'}
-                        </span>
-                        <button
-                          type="button"
-                          className="settings-copy"
-                          aria-label={`复制 ${platform.label} 代理`}
-                          disabled={!value.trim()}
-                          onClick={() => void navigator.clipboard.writeText(value)}
-                        >
-                          ⧉
-                        </button>
+                        <label className="settings-chat-proxy__host">
+                          <span>代理 IP / 域名</span>
+                          <input
+                            className="address__input settings-input"
+                            value={chatProxyDraft.host}
+                            spellCheck={false}
+                            placeholder="127.0.0.1"
+                            onChange={event => { setChatProxyDraft(current => ({ ...current, host: event.target.value })); setChatProxyError('') }}
+                          />
+                        </label>
+                        <label className="settings-chat-proxy__port">
+                          <span>端口</span>
+                          <input
+                            className="address__input settings-input"
+                            type="number"
+                            min={1}
+                            max={65535}
+                            step={1}
+                            value={chatProxyDraft.port}
+                            placeholder="7890"
+                            onChange={event => { setChatProxyDraft(current => ({ ...current, port: event.target.value })); setChatProxyError('') }}
+                          />
+                        </label>
                       </div>
-                    )
-                  })}
-
-                  <div className="settings-proxy-row settings-proxy-row--with-hint">
-                    <label className="settings-proxy-row__label">SSH 代理 <span className="settings-help">?</span></label>
-                    <input className="address__input settings-input" value={sshProxyDraft} spellCheck={false} placeholder="http://127.0.0.1:7897" onChange={(event) => setSshProxyDraft(event.target.value)} />
-                    <span className={`settings-state ${sshProxyDraft.trim() ? 'settings-state--ok' : ''}`}><i />{sshProxyDraft.trim() ? '已配置' : '未配置'}</span>
-                    <button type="button" className="settings-copy" aria-label="复制 SSH 代理" disabled={!sshProxyDraft.trim()} onClick={() => void navigator.clipboard.writeText(sshProxyDraft)}>⧉</button>
-                  </div>
-
-                  <div className="settings-proxy-row">
-                    <label className="settings-proxy-row__label">更新下载 <span className="settings-help">?</span></label>
-                    <input className="address__input settings-input" value={updateProxyDraft} spellCheck={false} placeholder="http://127.0.0.1:7897" onChange={(event) => setUpdateProxyDraft(event.target.value)} />
-                    <span className={`settings-state ${updateProxyDraft.trim() ? 'settings-state--ok' : ''}`}><i />{updateProxyDraft.trim() ? '已配置' : '未配置'}</span>
-                    <button type="button" className="settings-copy" aria-label="复制更新代理" disabled={!updateProxyDraft.trim()} onClick={() => void navigator.clipboard.writeText(updateProxyDraft)}>⧉</button>
+                    ) : null}
+                    <p className="settings-backend-hint">代理仅作用于 ChatGPT 网页连接，不改变电脑其他软件的网络，也不会上传到服务器。留空或关闭代理即直连。</p>
+                    {chatProxyError ? <p className="settings-feedback" role="alert">{chatProxyError}</p> : null}
                   </div>
                 </section>
 
@@ -4093,7 +4118,7 @@ ${record.command}`
             <div className="modal__foot settings-modal__foot">
               {settingsError ? <p className="settings-feedback settings-feedback--save" role="alert">{settingsError}</p> : null}
               <span className="panel__spacer" />
-              <button type="button" className="settings-cancel-btn" disabled={savingSettings || backendLoginBusy || settingsOperationBusy} onClick={() => { setBackendUrlDraft(settings?.backendUrl ?? ''); setForceDefaultBackendUrlDraft(settings?.forceDefaultBackendUrl ?? true); setBackendUrlError(''); setProxyDrafts(settings?.embedProxy ?? {}); setSshProxyDraft(settings?.sshProxy ?? ''); setSoftwareProxyDraft(settings?.softwareProxy ?? DEFAULT_SOFTWARE_PROXY); setSoftwareProxyError(''); setUpdateProxyDraft(settings?.updateProxy ?? ''); setDefaultPlatformDraft(settings?.defaultPlatformId ?? ''); setThemeDraft(settings?.theme ?? 'light'); setSettingsOpen(false) }}>{settingsSection === 'devices' || settingsSection === 'qqMail' ? '关闭' : '取消'}</button>
+              <button type="button" className="settings-cancel-btn" disabled={savingSettings || backendLoginBusy || settingsOperationBusy} onClick={() => { setBackendUrlDraft(settings?.backendUrl ?? ''); setForceDefaultBackendUrlDraft(settings?.forceDefaultBackendUrl ?? true); setBackendUrlError(''); setChatProxyDraft(parseChatProxyDraft(settings?.embedProxy?.chatgpt ?? '')); setChatProxyError(''); setDefaultPlatformDraft(settings?.defaultPlatformId ?? ''); setThemeDraft(settings?.theme ?? 'light'); setSettingsOpen(false) }}>{settingsSection === 'devices' || settingsSection === 'qqMail' ? '关闭' : '取消'}</button>
               {settingsSection !== 'devices' && settingsSection !== 'qqMail' ? <button type="button" className="settings-save-btn" disabled={savingSettings || backendLoginBusy || settingsOperationBusy || settingsLoading || settingsLoadFailed || settings === null} onClick={() => void saveSettings()}>{savingSettings ? '保存中…' : settingsLoading ? '读取设置中…' : settingsSection === 'backend' || settingsSection === 'chat' ? '保存' : '保存并重新加载'}</button> : null}
             </div>
           </div>
@@ -4267,3 +4292,5 @@ ${record.command}`
     </div>
   )
 }
+
+[executed on device: BWG (8d95c7ab-1c8e-462d-9b14-d6af2257a097)]
