@@ -16,6 +16,7 @@ import './assets/workspace-empty.css'
 import './assets/workspace-brand.css'
 import './assets/workspace-updates.css'
 import './assets/workspace-titlebar.css'
+import { CHAT_ONLY_MODE } from '@shared/product-mode'
 
 const INITIAL_WORKSPACE: WorkspaceState = {
   view: 'manager',
@@ -55,6 +56,12 @@ function formatTransferDuration(seconds: number): string {
   return rest > 0 ? `${minutes} 分 ${rest} 秒` : `${minutes} 分`
 }
 
+
+function visibleSessions(items: ManagedSessionSummary[]): ManagedSessionSummary[] {
+  return CHAT_ONLY_MODE
+    ? items.filter(item => item.kind === 'local' && item.platformId === 'chatgpt')
+    : items
+}
 
 export default function WorkspaceApp(): ReactElement {
   const [workspace, setWorkspace] = useState<WorkspaceState>(INITIAL_WORKSPACE)
@@ -149,13 +156,13 @@ export default function WorkspaceApp(): ReactElement {
     let navigationCurrent = true
     let sessionsPushed = false
     let projectsPushed = false
-    const offSessions = window.api.onManagedSessionsChanged(items => { sessionsPushed = true; if (navigationCurrent) setSessions(items) })
+    const offSessions = window.api.onManagedSessionsChanged(items => { sessionsPushed = true; if (navigationCurrent) setSessions(visibleSessions(items)) })
     const offProjects = window.api.onWorkspaceProjectsChanged(items => { projectsPushed = true; if (navigationCurrent) setProjects(items) })
     void window.api.getWorkspaceState().then(setWorkspace)
     void window.api.getSettings().then((value) => setTheme(value.theme)).catch(() => {
       /* Light is the safe fallback when settings are unavailable during startup. */
     })
-    void window.api.listManagedSessions().then(items => { if (navigationCurrent && !sessionsPushed) setSessions(items) })
+    void window.api.listManagedSessions().then(items => { if (navigationCurrent && !sessionsPushed) setSessions(visibleSessions(items)) })
       .catch(() => { if (navigationCurrent) setNavigationError('读取对话失败，请重新打开应用。') })
     void window.api.listWorkspaceProjects().then(items => { if (navigationCurrent && !projectsPushed) setProjects(items) })
       .catch(() => { if (navigationCurrent) setNavigationError('读取项目失败，请重新打开应用。') })
@@ -321,7 +328,7 @@ export default function WorkspaceApp(): ReactElement {
 
   return (
     <ToolWindowsProvider sessionIds={sessions.map((item) => item.id)}>
-    <div className={'workspace workspace--titlebar' + (navCollapsed ? ' workspace--nav-collapsed' : '')} data-theme={theme} style={{ '--nav-width': `${navWidth}px` } as CSSProperties}>
+    <div className={'workspace workspace--titlebar' + (CHAT_ONLY_MODE ? ' workspace--chat-only' : '') + (navCollapsed ? ' workspace--nav-collapsed' : '')} data-theme={theme} style={{ '--nav-width': `${navWidth}px` } as CSSProperties}>
       <header className="workspace__titlebar">
         <div className="workspace__titlebar-content">
           <span className="workspace__window-title"><img src={brandIcon} alt="" aria-hidden="true" />Web2Term</span>
@@ -367,7 +374,7 @@ export default function WorkspaceApp(): ReactElement {
             theme={theme}
             onThemeChange={setTheme}
             onOpenWeb2termConnection={openWeb2termDeviceDialog}
-            initialSshDialogOpen={workspace.openSshDialog}
+            initialSshDialogOpen={CHAT_ONLY_MODE ? false : workspace.openSshDialog}
             globalModalOpen={workspaceModalOpen}
             /*
              * Read from the session list rather than held as its own state: the main process
@@ -501,7 +508,7 @@ export default function WorkspaceApp(): ReactElement {
           onClose={closeNewSessionDialog} onCreate={kind => void createManagedSession(kind)}
           onWeb2term={trigger => openWeb2termDeviceDialog(trigger, { projectId: newSessionProjectId })} />
       ) : null}
-      {web2termDeviceDialogOpen ? <Web2termDeviceDialog onClose={closeWeb2termDeviceDialog} onConnected={openWeb2termConnection} /> : null}
+      {!CHAT_ONLY_MODE && web2termDeviceDialogOpen ? <Web2termDeviceDialog onClose={closeWeb2termDeviceDialog} onConnected={openWeb2termConnection} /> : null}
       <span ref={updateNoticeAnchor} className="workspace__update-anchor" aria-hidden="true" />
       <ConfirmDialog
         open={updateNotice !== null}
@@ -534,3 +541,5 @@ export default function WorkspaceApp(): ReactElement {
     </ToolWindowsProvider>
   )
 }
+
+[executed on device: BWG (8d95c7ab-1c8e-462d-9b14-d6af2257a097)]
