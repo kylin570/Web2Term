@@ -1,6 +1,6 @@
 {
   "name": "web2term",
-  "productName": "Web2Term",
+  "productName": "Web2Term Chat",
   "version": "0.1.214",
   "private": true,
   "description": "Local-first ChatGPT desktop client with per-device workspace and proxy settings",
@@ -85,5 +85,3 @@
     "vite": "^7.3.6"
   }
 }
-
-[executed on device: BWG (8d95c7ab-1c8e-462d-9b14-d6af2257a097)]

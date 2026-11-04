@@ -1,39 +1,41 @@
 # Web2Term Chat
 
-这是基于 [naledao/Web2Term](https://github.com/naledao/Web2Term) 改造的 ChatGPT 专用桌面客户端。
+这是基于 [naledao/Web2Term](https://github.com/naledao/Web2Term) 改造的 ChatGPT 专用桌面客户端。**本分支与原 Web2Term 使用不同的软件标识和本地数据目录，不会覆盖原程序及原会话库。**
 
-## 本分支功能
+## 用户功能
 
-- 在桌面窗口中打开官方 ChatGPT 网站，使用 OpenAI 账号原生登录。
-- 保留 ChatGPT 网页自身的文件上传、图片、附件和下载能力。
-- 每台电脑独立保存 Web2Term 项目、会话索引和本地工作区数据。
-- 支持 HTTP、HTTPS、SOCKS5 代理，可分别填写代理服务器地址和端口。
-- 保留应用主题与应用更新功能。
+- 注册独立的客户端用户名和密码；**一个用户名只能绑定一台电脑**。注册成功后自动绑定；另一台电脑即使密码正确也会被服务器拒绝。
+- 在当前电脑登录后才创建和加载 ChatGPT 页面。客户端账号和 ChatGPT/OpenAI 官方账号相互独立。
+- 同电脑可以重新登录，退出账号不等于解绑；换机由管理员在服务端清除绑定，保留用户名和原密码。
+- 在桌面窗口中打开官方 ChatGPT，使用原生登录、上传文件、图片、下载和模型网站提供的功能。
+- 本地管理 ChatGPT 项目和聊天入口，支持 HTTP、HTTPS、SOCKS5 代理。代理仅对 ChatGPT 嵌入网页生效。
+- 保留应用主题和更新功能；取消本地/远程终端、SSH、SFTP、web2term 设备连接、Computer Use 和多模型切换入口。
 
-## 数据与账号隔离
+## 账户与本地数据
 
-- Web2Term 的项目、会话索引和本地设置保存在当前电脑的 Electron userData 目录及 conversations.db 中，不上传、不在设备之间同步。
-- ChatGPT 登录态保存在当前电脑的 persist:chatgpt 浏览器分区。每台电脑分别登录同一个 OpenAI 账号；本程序不会复制或同步 Cookie 文件。
-- ChatGPT 网站的云端聊天历史仍由 OpenAI 账号管理。同一账号在不同设备打开 ChatGPT 网站时，OpenAI 自身的云端历史仍可能共享；本程序不会将它伪装成设备隔离。
-- 代理配置只应用于 ChatGPT 嵌入网页，不改变系统代理，也不上传到服务器。
-
-## 本分支不提供的功能
-
-SSH、SFTP、本地终端命令执行、远程设备 Agent、Web2Term 后端设备连接、Computer Use、后台任务、定时任务、邮件通知及多模型切换均已从本分支的产品入口和运行路径关闭。
+- 账号认证使用独立 HTTPS API：`https://auth.nvhai.de`。服务端只保存账号、加盐密码哈希、设备公钥以及经哈希处理的会话令牌；不会保存 ChatGPT Cookie。
+- 客户端首次注册时生成 Ed25519 设备密钥，私钥和登录令牌优先放在操作系统安全存储中，渲染进程不接触这些凭据。服务器需要验证设备密钥签名才能登录或续验。
+- 每台电脑的应用设置、项目及会话索引独立存放在 Electron `userData` 下的 SQLite 数据库；不会从软件上传到另一个设备。
+- ChatGPT 网站的云端聊天记录仍受同一 OpenAI 账号管理，**不能**通过本地数据隔离阻止 OpenAI 自身同步。
+- 此处的一机绑定是操作系统凭据保护下的单安装身份约束；任何软件式绑定都不能保证抵御管理员级篡改、完整磁盘克隆或二进制修改。部署和发行应使用代码签名。
+- 账号服务器必须可访问；认证不可用时客户端会暂时关闭聊天工作区以防绕过校验。
 
 ## 构建
 
-需要 Node.js 22 或兼容版本。
+需要 Node.js 22：
 
 ```bash
 npm ci
+npm run typecheck
 npm run build
 ```
 
-npm run build 执行 TypeScript 检查并构建 Electron 主进程、预加载脚本和渲染界面。Windows/macOS 安装包请使用仓库配置的对应打包工作流。
+Windows 安装包：`npm run dist:win`（在 Windows 构建机运行）；macOS Apple Silicon：`npm run dist:mac`。未签名或未公证的 macOS DMG 仍受 Gatekeeper 限制。
 
-## 上游项目
+## 服务器管理
 
-本仓库保留上游 Web2Term 的 MIT 许可与基础实现。原始多模型、终端和远程设备功能说明请查看 [上游项目文档](https://github.com/naledao/Web2Term)；这些功能不属于本分支的发行范围。
+服务源码、HTTPS 反向代理建议、管理员解绑及测试命令见 [account-server/README.md](account-server/README.md)。实际服务器使用 `web2term-account.service` 和 `/var/lib/web2term-account/accounts.sqlite3`。
 
-[executed on device: BWG (8d95c7ab-1c8e-462d-9b14-d6af2257a097)]
+## 许可
+
+继承上游 Web2Term 的 MIT 许可；第三方名称、商标和服务仍归各权利人所有。客户端仅封装官方 ChatGPT 网站，不构成 OpenAI 官方客户端。

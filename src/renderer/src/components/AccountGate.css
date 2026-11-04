@@ -1,0 +1,47 @@
+.account-gate {
+  min-height: 100vh;
+  width: 100%;
+  display: grid;
+  place-items: center;
+  padding: 28px;
+  background: radial-gradient(circle at 16% 8%, #eaf0ff 0, transparent 37%), #f6f8fb;
+  overflow-y: auto;
+  color: #1c293a;
+}
+.account-gate__card {
+  width: min(100%, 420px);
+  padding: 34px;
+  border: 1px solid #e4eaf3;
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: 0 20px 65px rgba(26,42,73,.10);
+}
+.account-gate__logo {display: grid; place-items: center; width: 48px; height: 48px; border-radius: 13px; background: #2959cc; color: white; font-size: 23px; font-weight: 800; margin: 0 auto 18px;}
+.account-gate h1 { margin: 0; font-size: 24px; text-align: center; font-weight: 760; letter-spacing: -.03em; }
+.account-gate__intro { margin: 7px 0 25px; font-size: 13px; text-align: center; color: #718197; }
+.account-gate__tabs {display: grid; grid-template-columns: 1fr 1fr; gap: 4px; padding: 4px; border-radius: 10px; background: #f1f4f9; margin-bottom: 24px;}
+.account-gate__tabs button {border: 0; border-radius: 8px; padding: 10px; color: #607087; background: transparent; cursor: pointer; font: inherit;}
+.account-gate__tabs button.is-active {background: white; color: #234b9a; font-weight: 700; box-shadow: 0 1px 4px rgba(20,40,80,.12);}
+.account-gate__form {display: flex; flex-direction: column; gap: 9px;}
+.account-gate__form label {font-size: 13px; font-weight: 700; color: #394a62;}
+.account-gate__form > input, .account-gate__password > input {height: 42px; border-radius: 9px; border: 1px solid #dce3ed; padding: 0 12px; outline: none; color: #25344a; background: white; font: inherit; font-size: 13px; width: 100%; user-select: text;}
+.account-gate__form > input:focus, .account-gate__password > input:focus {border-color: #4e7bdf; box-shadow: 0 0 0 3px rgba(79,120,220,.12);}
+.account-gate__password {position: relative; margin-bottom: 7px;}
+.account-gate__password > input {padding-right: 58px;}
+.account-gate__password > button {position: absolute; right: 7px; top: 5px; bottom: 5px; background: transparent; color: #62738d; border: none; cursor: pointer; font-size: 12px;}
+.account-gate__submit {height: 43px; background: #2959cc; color: white; border-radius: 9px; border: 0; font: inherit; font-size: 14px; font-weight: 700; cursor: pointer; margin-top: 13px;}
+.account-gate__submit:hover:not(:disabled) {background: #1c48b7;}
+.account-gate__submit:disabled {opacity: .7; cursor: wait;}
+.account-gate__device-note {padding: 12px 13px; font-size: 12px; line-height: 1.75; color: #596a82; margin: 18px 0 10px; background: #f2f6fc; border-radius: 9px;}
+.account-gate__footer {font-size: 11.5px; line-height: 1.7; color: #8995a7; margin: 0;}
+.account-gate__notice {padding: 18px; border-radius: 10px; background: #f1f5fd; text-align: center; color: #465a75; font-size: 13px;}
+.account-gate__error {padding: 10px 12px; border-radius: 8px; background: #fff0f0; color: #a43434; font-size: 12px; line-height: 1.6; margin: 4px 0;}
+.account-gate__error button {border: 0; color: #2b56a2; background: none; cursor: pointer; text-decoration: underline; margin-left: 7px;}
+.workspace--chat-only .workspace__account-controls {display: flex; align-items: center; gap: 9px; margin-left: auto;}
+.workspace--chat-only .workspace__account-name {color: #5d6f88; font-size: 12px; font-weight: 600;}
+.workspace--chat-only .workspace__account-logout {border-radius: 6px; border: 1px solid #dfe4ec; background: #fff; color: #65778c; font-size: 11px; cursor: pointer; padding: 4px 9px;}
+.workspace--chat-only .workspace__account-logout:hover {color: #2b4c85; border-color: #a9bdd8;}
+[data-theme="dark"] .account-gate {background: #141b27; color: #f0f4fb;}
+[data-theme="dark"] .account-gate__card {background: #1f2a38; border-color: #344254;}
+
+.account-gate__drag { position: fixed; top: 0; left: 0; right: 140px; height: 32px; -webkit-app-region: drag; }

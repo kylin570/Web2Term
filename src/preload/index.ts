@@ -106,6 +106,16 @@ import type {
  * changing a signature here fails the typecheck instead of breaking the UI.
  */
 const api: AppApi = {
+  getAccountState: () => ipcRenderer.invoke(IpcChannels.accountGetState),
+  registerAccount: credentials => ipcRenderer.invoke(IpcChannels.accountRegister, credentials),
+  loginAccount: credentials => ipcRenderer.invoke(IpcChannels.accountLogin, credentials),
+  logoutAccount: () => ipcRenderer.invoke(IpcChannels.accountLogout),
+  retryAccount: () => ipcRenderer.invoke(IpcChannels.accountRetry),
+  onAccountChanged: listener => {
+    const handler = (_event: IpcRendererEvent, state: import('../shared/account-auth').AccountState): void => listener(state)
+    ipcRenderer.on(IpcChannels.accountChanged, handler)
+    return () => ipcRenderer.removeListener(IpcChannels.accountChanged, handler)
+  },
   listReleaseNotes: request => ipcRenderer.invoke(IpcChannels.releaseNotesList, request),
   getReleaseNote: request => ipcRenderer.invoke(IpcChannels.releaseNotesDetail, request),
   markReleaseNoteRead: request => ipcRenderer.invoke(IpcChannels.releaseNotesRead, request),

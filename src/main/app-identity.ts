@@ -6,6 +6,7 @@ import { app } from 'electron'
 // Windows notifications still belong to the same application.
 export { APP_NAME, APP_ID, APP_DEVELOPMENT_NAME, APP_DEVELOPMENT_ID } from '../shared/app-identity'
 import { APP_NAME, APP_DEVELOPMENT_NAME } from '../shared/app-identity'
+import { CHAT_ONLY_MODE } from '../shared/product-mode'
 
 const LEGACY_PRODUCT_NAME = 'GPT Web to Codex Terminal'
 const LEGACY_PACKAGE_NAME = 'gpt-web-to-codex-terminal'
@@ -16,7 +17,7 @@ export function configureAppIdentity(): void {
   const legacyNames = app.isPackaged
     ? [LEGACY_PRODUCT_NAME, LEGACY_PACKAGE_NAME]
     : [LEGACY_PACKAGE_NAME, LEGACY_PRODUCT_NAME]
-  const candidates = [APP_NAME, ...legacyNames].map(name => join(appData, name))
+  const candidates = (CHAT_ONLY_MODE ? [APP_NAME] : [APP_NAME, ...legacyNames]).map(name => join(appData, name))
 
   // Electron can create an empty directory under the new name before we run.
   // Prefer an existing database over an empty directory to retain conversations,

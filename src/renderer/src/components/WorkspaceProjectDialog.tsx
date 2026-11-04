@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react'
 import type { ReactElement } from 'react'
 import type { WorkspaceProject } from '@shared/types'
 import './WorkspaceProjectDialog.css'
+import { CHAT_ONLY_MODE } from '@shared/product-mode'
 
 export default function WorkspaceProjectDialog({ project, onClose, onSaved }: {
   project: WorkspaceProject | null; onClose(): void; onSaved(project: WorkspaceProject): void
@@ -30,7 +31,7 @@ export default function WorkspaceProjectDialog({ project, onClose, onSaved }: {
     setSaving(true)
     setError('')
     try {
-      const next = await window.api.saveWorkspaceProject({ id: project?.id, name, directory })
+      const next = await window.api.saveWorkspaceProject({ id: project?.id, name, directory: CHAT_ONLY_MODE ? '' : directory })
       if (mounted.current) onSaved(next)
     } catch (cause) { if (mounted.current) setError(cause instanceof Error ? cause.message.replace(/^Error invoking remote method '[^']+': (?:Error: )?/, '') : '保存项目失败，请重试。') }
     finally { busy.current = false; if (mounted.current) setSaving(false) }
@@ -41,11 +42,15 @@ export default function WorkspaceProjectDialog({ project, onClose, onSaved }: {
         <button type="button" aria-label="关闭" disabled={saving || choosing} onClick={onClose}>×</button></div>
       <label>项目名称<input autoFocus required maxLength={120} value={name} disabled={saving || choosing} placeholder="例如：设备管理"
         onChange={event => setName(event.target.value)} /></label>
-      <label htmlFor="workspace-project-directory">本机目录 <span className="workspace-project-dialog__optional">可选</span></label>
-      <div className="workspace-project-dialog__directory"><input id="workspace-project-directory" readOnly value={directory} placeholder="默认目录" title={directory || '使用默认目录'} />
-        <button type="button" disabled={saving || choosing} onClick={() => void choose()}>{choosing ? '选择中…' : '选择目录'}</button>
-        {directory ? <button type="button" disabled={saving || choosing} aria-label="恢复默认目录" title="恢复默认目录" onClick={() => setDirectory('')}>×</button> : null}</div>
-      <p className="workspace-project-dialog__hint">项目中新建的本机会话将使用此目录，留空则使用默认目录。</p>
+      {!CHAT_ONLY_MODE ? (
+        <>
+          <label htmlFor="workspace-project-directory">本机目录 <span className="workspace-project-dialog__optional">可选</span></label>
+          <div className="workspace-project-dialog__directory"><input id="workspace-project-directory" readOnly value={directory} placeholder="默认目录" title={directory || '使用默认目录'} />
+            <button type="button" disabled={saving || choosing} onClick={() => void choose()}>{choosing ? '选择中…' : '选择目录'}</button>
+            {directory ? <button type="button" disabled={saving || choosing} aria-label="恢复默认目录" title="恢复默认目录" onClick={() => setDirectory('')}>×</button> : null}</div>
+          <p className="workspace-project-dialog__hint">项目中新建的本机会话将使用此目录，留空则使用默认目录。</p>
+        </>
+      ) : null}
       {error ? <p className="workspace-project-dialog__error" role="alert">{error}</p> : null}
       <div className="workspace-project-dialog__footer"><button type="button" disabled={saving || choosing} onClick={onClose}>取消</button>
         <button type="submit" className="is-primary" disabled={!name.trim() || saving || choosing}>{saving ? '保存中…' : project ? '保存' : '创建项目'}</button></div>

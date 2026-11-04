@@ -18,6 +18,8 @@ import { randomUUID } from 'node:crypto'
 import { app, BrowserWindow, dialog, ipcMain, Menu, nativeImage, nativeTheme, powerMonitor, safeStorage, screen, session, shell, Tray } from 'electron'
 import { APP_NAME, configureAppIdentity } from './app-identity'
 import { CHAT_ONLY_MODE } from '../shared/product-mode'
+import { DeviceAccountService } from './account-auth'
+import type { AccountCredentials, AccountState, AccountResult } from '../shared/account-auth'
 import { registerDesktopNotifications } from './desktop-notifications'
 import { openFocusHtmlPreview } from './focus-html-preview'
 import { configureWindowsAppDetails } from './windows-app-details'
@@ -199,6 +201,7 @@ let quitting = false
 let store: ConversationStore | null = null
 let scheduledTasks: ScheduledTasks | null = null
 let backendAuth: BackendAuthService | null = null
+let deviceAccount: DeviceAccountService | null = null
 let qqMail: QqMailService | null = null
 let web2termConnection: Web2termConnection | null = null
 let localMachineId = ''
@@ -858,6 +861,44 @@ function applyAppTheme(theme: AppTheme): void {
   for (const view of nacosViews.values()) view.setTheme(theme)
 }
 
+/** Do not create any native ChatGPT view until the server has admitted this device. */
+function authorized(): boolean { return !CHAT_ONLY_MODE || deviceAccount?.isAuthenticated() === true }
+
+function lockAccountWorkspace(): void {
+  if (!CHAT_ONLY_MODE || !runtimes.size) return
+  const savedSelection = currentSessionId
+  for (const runtime of runtimes.values()) {
+    try { persistManagedSession(runtime) } catch { /* Never retain an unauthorized native page. */ }
+    runtime.dispose()
+  }
+  runtimes.clear()
+  currentSessionId = null
+  workspaceOpenSshDialog = false
+  // Preserve the most recent chat selection for the next successful login.
+  if (savedSelection && store) store.setSetting(SETTING_WORKSPACE_SESSION_ID, savedSelection)
+  broadcastManagedSessions()
+  broadcastWorkspaceState()
+}
+
+function restoreAuthorizedWorkspace(): void {
+  if (!CHAT_ONLY_MODE || !authorized() || !store || runtimes.size) return
+  const savedSelection = store.getSetting(SETTING_WORKSPACE_SESSION_ID) ?? ''
+  const stored = store.listManagedSessions().filter(item =>
+    item.platformId === CHATGPT_PLATFORM.id && !item.sshAttached && !item.sshHostId &&
+    !parseWeb2termBinding(store!.getSetting(`web2termSession:${item.id}`)))
+  for (const item of stored) createSession('local', false, item, CHATGPT_PLATFORM)
+  restoreWorkspaceSelection(savedSelection, false)
+  broadcastManagedSessions()
+}
+
+function onDeviceAccountChanged(state: AccountState): void {
+  if (applicationReady && CHAT_ONLY_MODE) {
+    if (state.status === 'signed-in') restoreAuthorizedWorkspace()
+    else lockAccountWorkspace()
+  }
+  if (managerWindow && !managerWindow.isDestroyed()) managerWindow.webContents.send(IpcChannels.accountChanged, state)
+}
+
 function managedSessions(): ManagedSessionSummary[] {
   const items = [...runtimes.values()]
     .map((runtime) => ({ ...runtime.summary(), unseenCompletedCount: unseenCompletedTasks.get(runtime.id) ?? 0 }))
@@ -941,6 +982,7 @@ function restoreWorkspaceSelection(savedId: string, openSshDialog: boolean): voi
 }
 
 function selectSession(id: string, openSshDialog = false): boolean {
+  if (!authorized()) return false
   const runtime = runtimes.get(id)
   if (!runtime) return false
   if (currentSessionId && currentSessionId !== id) runtimes.get(currentSessionId)?.setActive(false)
@@ -975,12 +1017,13 @@ function selectSession(id: string, openSshDialog = false): boolean {
 }
 
 function runtimeForEvent(event: IpcMainEvent | IpcMainInvokeEvent): SessionRuntime | null {
+  if (!authorized()) return null
   if (!managerWindow || managerWindow.isDestroyed() || event.sender !== managerWindow.webContents || event.senderFrame !== event.sender.mainFrame) return null
   return currentSessionId ? runtimes.get(currentSessionId) ?? null : null
 }
 
 function isManagerEvent(event: IpcMainEvent | IpcMainInvokeEvent): boolean {
-  return Boolean(managerWindow && !managerWindow.isDestroyed() && event.sender === managerWindow.webContents && event.senderFrame === event.sender.mainFrame)
+  return Boolean(authorized() && managerWindow && !managerWindow.isDestroyed() && event.sender === managerWindow.webContents && event.senderFrame === event.sender.mainFrame)
 }
 /**
  * One Nacos view per session, retained while that session's tool is minimized.
@@ -1313,7 +1356,21 @@ function registerIpcHandlers(): void {
     positionComputerUseOverlay(window)
   })
   const fromManager = (event: IpcMainEvent | IpcMainInvokeEvent): boolean =>
-    managerWindow !== null && !managerWindow.isDestroyed() && event.sender === managerWindow.webContents
+    authorized() && managerWindow !== null && !managerWindow.isDestroyed() && event.sender === managerWindow.webContents && event.senderFrame === event.sender.mainFrame
+
+  const fromLoginWindow = (event: IpcMainInvokeEvent): boolean =>
+    Boolean(managerWindow && !managerWindow.isDestroyed() && event.sender === managerWindow.webContents && event.senderFrame === event.sender.mainFrame)
+  const unavailableAccount: AccountState = { status: 'unavailable', username: null, message: '登录服务尚未启动。', server: '' }
+  ipcMain.handle(IpcChannels.accountGetState, event => fromLoginWindow(event) ? deviceAccount?.getState() ?? unavailableAccount : unavailableAccount)
+  const credentials = async (event: IpcMainInvokeEvent, action: 'register' | 'login', input: AccountCredentials): Promise<AccountResult> => {
+    if (!fromLoginWindow(event) || !deviceAccount || !input || typeof input.username !== 'string' || typeof input.password !== 'string')
+      return { ok: false, code: 'BAD_REQUEST', message: '登录请求无效。' }
+    return deviceAccount.credentials(action, { username: input.username.slice(0, 128), password: input.password.slice(0, 256) })
+  }
+  ipcMain.handle(IpcChannels.accountRegister, (event, input: AccountCredentials) => credentials(event, 'register', input))
+  ipcMain.handle(IpcChannels.accountLogin, (event, input: AccountCredentials) => credentials(event, 'login', input))
+  ipcMain.handle(IpcChannels.accountLogout, event => fromLoginWindow(event) && deviceAccount ? deviceAccount.logout() : unavailableAccount)
+  ipcMain.handle(IpcChannels.accountRetry, event => fromLoginWindow(event) && deviceAccount ? deviceAccount.restore() : unavailableAccount)
 
   const requireGithubSender = (event: IpcMainInvokeEvent): void => {
     if (!fromManager(event) || event.senderFrame !== event.sender.mainFrame) throw new Error('请求不是来自应用主窗口。')
@@ -2381,6 +2438,7 @@ async function initializeApplication(): Promise<void> {
 
     const conversationStore = new ConversationStore(join(app.getPath('userData'), 'conversations.db'))
     store = conversationStore
+    if (CHAT_ONLY_MODE) deviceAccount = new DeviceAccountService(app.getPath('userData'), onDeviceAccountChanged)
     qqMail = new QqMailService(conversationStore, {
       encryptionAvailable: () => safeStorage.isEncryptionAvailable()
         && (process.platform !== 'linux' || safeStorage.getSelectedStorageBackend() !== 'basic_text'),
@@ -2478,25 +2536,22 @@ async function initializeApplication(): Promise<void> {
     armSplashFallback()
     // First check fires immediately, then every 30 minutes (packaged builds only).
     startUpdateSchedule()
-    const savedWorkspaceSessionId = conversationStore.getSetting(SETTING_WORKSPACE_SESSION_ID) ?? ''
-    const savedWorkspaceOpenSshDialog = conversationStore.getSetting(SETTING_WORKSPACE_OPEN_SSH_DIALOG) === '1'
-    const savedSessions = conversationStore.listManagedSessions().filter(savedSession =>
-      !CHAT_ONLY_MODE || (
-        savedSession.platformId === CHATGPT_PLATFORM.id
-        && !savedSession.sshAttached
-        && !savedSession.sshHostId
-        && !parseWeb2termBinding(conversationStore.getSetting(`web2termSession:${savedSession.id}`))
-      ))
-    inheritWorkspaceProjectNotes(conversationStore)
-    for (const savedSession of savedSessions) {
-        // Restore each session onto the site it was created on. An id this build does not
-        // know (a row from a newer version, or a removed platform) falls back to the
-        // default rather than throwing — a bad id must not make the app unopenable.
+    if (!CHAT_ONLY_MODE) {
+      const savedWorkspaceSessionId = conversationStore.getSetting(SETTING_WORKSPACE_SESSION_ID) ?? ''
+      const savedWorkspaceOpenSshDialog = conversationStore.getSetting(SETTING_WORKSPACE_OPEN_SSH_DIALOG) === '1'
+      const savedSessions = conversationStore.listManagedSessions()
+      inheritWorkspaceProjectNotes(conversationStore)
+      for (const savedSession of savedSessions) {
         const platform = platformById(savedSession.platformId) ?? CHATGPT_PLATFORM
         createSession('local', false, savedSession, platform)
+      }
+      restoreWorkspaceSelection(savedWorkspaceSessionId, savedWorkspaceOpenSshDialog)
+    } else {
+      // Login must be visible before any workspace embed is attached to the window.
+      currentSessionId = null
+      workspaceOpenSshDialog = false
+      closeSplashWindow()
     }
-
-    restoreWorkspaceSelection(savedWorkspaceSessionId, CHAT_ONLY_MODE ? false : savedWorkspaceOpenSshDialog)
     notificationActivations.markReady()
     if (!CHAT_ONLY_MODE) scheduledTasks.start()
 
@@ -2511,6 +2566,10 @@ async function initializeApplication(): Promise<void> {
       createManagerWindow()
     })
     applicationReady = true
+    if (CHAT_ONLY_MODE) {
+      await deviceAccount?.restore()
+      deviceAccount?.startMonitoring()
+    }
 }
 
 async function startApplication(): Promise<void> {
@@ -2544,6 +2603,7 @@ if (!app.requestSingleInstanceLock()) {
 
 app.on('before-quit', () => {
   quitting = true
+  deviceAccount?.dispose()
   scheduledTasks?.dispose()
   desktopCoordinator.dispose()
   desktopWindows.dispose()
@@ -2564,5 +2624,3 @@ app.on('will-quit', () => {
   store?.close()
   store = null
 })
-
-[executed on device: BWG (8d95c7ab-1c8e-462d-9b14-d6af2257a097)]

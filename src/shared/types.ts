@@ -112,6 +112,12 @@ export const IpcChannels = {
   interceptorEndTask: 'interceptor:end-task',
   commandRecoveryRetry: 'interceptor:retry-command-recovery',
   interceptorEvent: 'interceptor:event',
+  accountGetState: 'account:get-state',
+  accountRegister: 'account:register',
+  accountLogin: 'account:login',
+  accountLogout: 'account:logout',
+  accountRetry: 'account:retry',
+  accountChanged: 'account:changed',
   settingsGet: 'settings:get',
   settingsUpdate: 'settings:update',
   qqMailGet: 'qq-mail:get',
@@ -2311,6 +2317,12 @@ export interface NacosSaveResult extends NacosConnectionsState {
  * renderer consumes it, so the two can never drift apart.
  */
 export interface AppApi {
+  getAccountState(): Promise<import('./account-auth').AccountState>
+  registerAccount(credentials: import('./account-auth').AccountCredentials): Promise<import('./account-auth').AccountResult>
+  loginAccount(credentials: import('./account-auth').AccountCredentials): Promise<import('./account-auth').AccountResult>
+  logoutAccount(): Promise<import('./account-auth').AccountState>
+  retryAccount(): Promise<import('./account-auth').AccountState>
+  onAccountChanged(listener: (state: import('./account-auth').AccountState) => void): () => void
   listReleaseNotes(request?: ReleaseNotesPageRequest): Promise<ReleaseNotesResult<ReleaseNotesPage>>
   getReleaseNote(request: ReleaseNoteRequest): Promise<ReleaseNotesResult<ReleaseNoteDetail>>
   markReleaseNoteRead(request: ReleaseNoteRequest): Promise<ReleaseNotesResult<ReleaseNoteRead>>

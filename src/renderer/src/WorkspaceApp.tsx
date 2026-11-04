@@ -17,6 +17,8 @@ import './assets/workspace-brand.css'
 import './assets/workspace-updates.css'
 import './assets/workspace-titlebar.css'
 import { CHAT_ONLY_MODE } from '@shared/product-mode'
+import AccountGate from './components/AccountGate'
+import type { AccountState } from '@shared/account-auth'
 
 const INITIAL_WORKSPACE: WorkspaceState = {
   view: 'manager',
@@ -65,6 +67,16 @@ function visibleSessions(items: ManagedSessionSummary[]): ManagedSessionSummary[
 
 export default function WorkspaceApp(): ReactElement {
   const [workspace, setWorkspace] = useState<WorkspaceState>(INITIAL_WORKSPACE)
+  const [account, setAccount] = useState<AccountState>({ status: 'checking', username: null, message: '', server: '' })
+  useEffect(() => {
+    if (!CHAT_ONLY_MODE) return
+    let active = true
+    let delivered = false
+    const off = window.api.onAccountChanged(value => { delivered = true; if (active) setAccount(value) })
+    void window.api.getAccountState().then(value => { if (active && !delivered) setAccount(value) })
+      .catch(() => { if (active && !delivered) setAccount({ status: 'unavailable', username: null, message: '无法获取登录状态。', server: '' }) })
+    return () => { active = false; off() }
+  }, [])
   const [sessions, setSessions] = useState<ManagedSessionSummary[]>([])
   const [projects, setProjects] = useState<WorkspaceProject[]>([])
   const [projectEditor, setProjectEditor] = useState<{ project: WorkspaceProject | null } | null>(null)
@@ -326,12 +338,20 @@ export default function WorkspaceApp(): ReactElement {
     || projectEditor !== null || movingSession !== null || releaseNotesOpen
   const newSessionProject = projects.find(project => project.id === newSessionProjectId)
 
+  if (CHAT_ONLY_MODE && account.status !== 'signed-in') {
+    return <AccountGate state={account} retry={async () => { setAccount(await window.api.retryAccount()) }} />
+  }
+
   return (
     <ToolWindowsProvider sessionIds={sessions.map((item) => item.id)}>
     <div className={'workspace workspace--titlebar' + (CHAT_ONLY_MODE ? ' workspace--chat-only' : '') + (navCollapsed ? ' workspace--nav-collapsed' : '')} data-theme={theme} style={{ '--nav-width': `${navWidth}px` } as CSSProperties}>
       <header className="workspace__titlebar">
         <div className="workspace__titlebar-content">
-          <span className="workspace__window-title"><img src={brandIcon} alt="" aria-hidden="true" />Web2Term</span>
+          <span className="workspace__window-title"><img src={brandIcon} alt="" aria-hidden="true" />Web2Term Chat</span>
+          {CHAT_ONLY_MODE ? <div className="workspace__account-controls">
+            <span className="workspace__account-name" title="客户端账户，本机已绑定">{account.username} · 本机已绑定</span>
+            <button className="workspace__account-logout" type="button" onClick={() => void window.api.logoutAccount()}>退出账号</button>
+          </div> : null}
           <ReleaseNotes open={releaseNotesOpen} theme={theme} appVersion={appVersion}
             onOpen={() => { window.api.setEmbedVisible(false); setReleaseNotesOpen(true) }} onClose={() => setReleaseNotesOpen(false)} />
         </div>
@@ -541,5 +561,3 @@ export default function WorkspaceApp(): ReactElement {
     </ToolWindowsProvider>
   )
 }
-
-[executed on device: BWG (8d95c7ab-1c8e-462d-9b14-d6af2257a097)]

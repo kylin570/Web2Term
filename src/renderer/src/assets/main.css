@@ -9998,5 +9998,5438 @@ body {
 
 .git-dialog__tab--on {
   background: #fff;
+  color: #4a6cf7;
+  box-shadow: 0 1px 3px rgba(42, 65, 96, 0.14);
+}
 
-[executed on device: BWG (8d95c7ab-1c8e-462d-9b14-d6af2257a097)]
+/* The meta pills now sit next to the tabs, so they must not push them apart. */
+.git-dialog__meta {
+  margin-left: 10px;
+}
+
+/* ---------------- dark theme ---------------- */
+
+.git-dialog--dark .git-dialog__tabs {
+  background: #1a2331;
+}
+
+.git-dialog--dark .git-dialog__tab {
+  color: #9fb0c6;
+}
+
+.git-dialog--dark .git-dialog__tab:hover {
+  color: #dbe5f2;
+}
+
+.git-dialog--dark .git-dialog__tab--on {
+  background: #253247;
+  color: #8fa6ff;
+  box-shadow: none;
+}
+
+
+/* ---------------- changed files: list | diff ---------------- */
+
+.gitfiles {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 360px 8px minmax(0, 1fr);
+}
+
+.gitfiles__pane {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+}
+
+.gitfiles__head {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 16px 18px 10px;
+}
+
+.gitfiles__title {
+  font-size: 15px;
+  font-weight: 800;
+  color: #16202f;
+}
+
+.gitfiles__count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 26px;
+  height: 22px;
+  padding: 0 7px;
+  border-radius: 999px;
+  background: #eef2ff;
+  color: #4a5fe0;
+  font-size: 12.5px;
+  font-weight: 800;
+}
+
+.gitfiles__totals {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+  font-style: normal;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.gitfiles__plus {
+  color: #2f9e5f;
+  font-style: normal;
+}
+
+.gitfiles__minus {
+  color: #d14949;
+  font-style: normal;
+}
+
+.gitfiles__filters {
+  flex: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  padding: 0 18px 10px;
+}
+
+.gitfiles__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  height: 30px;
+  padding: 0 12px;
+  border: 1px solid #e2e7ef;
+  border-radius: 9px;
+  background: #fff;
+  color: #5a6b82;
+  font-size: 12.5px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.gitfiles__chip:hover {
+  border-color: #c9d6fb;
+  color: #3f63df;
+}
+
+.gitfiles__chip--on {
+  border-color: #b8c8fb;
+  background: #eef2ff;
+  color: #3f63df;
+}
+
+.gitfiles__chip em {
+  font-style: normal;
+  opacity: 0.72;
+}
+
+.gitfiles__search {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin: 0 18px 10px;
+  padding: 0 12px;
+  height: 38px;
+  border: 1px solid #e2e7ef;
+  border-radius: 10px;
+  color: #9aa5b6;
+}
+
+.gitfiles__search input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  background: transparent;
+  color: #26313f;
+  font-size: 13px;
+  outline: none;
+}
+
+.gitfiles__tree {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  overflow: auto;
+  padding: 0 10px 16px;
+}
+
+.gitfiles__tree-content {
+  width: max-content;
+  min-width: 100%;
+}
+
+.gitfiles__none {
+  margin: 30px 0;
+  text-align: center;
+  color: #8d99ab;
+  font-size: 13px;
+}
+
+.gitfiles__folder {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  height: 34px;
+  padding: 0 8px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: #5a6b82;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  text-align: left;
+}
+
+.gitfiles__folder:hover {
+  background: #f4f7fb;
+}
+
+.gitfiles__caret {
+  flex: none;
+  display: inline-flex;
+  color: #9aa5b6;
+  transition: transform 0.12s ease;
+}
+
+.gitfiles__caret--open {
+  transform: rotate(90deg);
+}
+
+.gitfiles__folder-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.gitfiles__folder-count {
+  margin-left: auto;
+  font-style: normal;
+  color: #a4aebd;
+  font-size: 12px;
+}
+
+.gitfiles__file {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+  height: 36px;
+  padding: 0 8px 0 28px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+}
+
+.gitfiles__file:hover {
+  background: #f4f7fb;
+}
+
+.gitfiles__file--on {
+  background: #eef2ff;
+}
+
+.gitfiles__ext {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 22px;
+  border-radius: 5px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+.gitfiles__ext--ts {
+  background: #e6f0ff;
+  color: #2f6fd0;
+}
+
+.gitfiles__ext--tsx {
+  background: #e3f4f8;
+  color: #1f7f95;
+}
+
+.gitfiles__ext--json {
+  background: #fdf5e3;
+  color: #b5820c;
+}
+
+.gitfiles__ext--doc {
+  background: #eceff4;
+  color: #5a6b82;
+}
+
+.gitfiles__name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #26313f;
+  font-size: 13px;
+}
+
+.gitfiles__badge {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 22px;
+  height: 20px;
+  padding: 0 5px;
+  border-radius: 5px;
+  font-size: 11.5px;
+  font-style: normal;
+  font-weight: 800;
+}
+
+.gitfiles__badge--mod {
+  background: #fdf5e3;
+  color: #b5820c;
+}
+
+.gitfiles__badge--add {
+  background: #e8f6ec;
+  color: #2f9e5f;
+}
+
+.gitfiles__badge--del {
+  background: #fdecec;
+  color: #d14949;
+}
+
+.gitfiles__badge--ren {
+  background: #eef2ff;
+  color: #4a5fe0;
+}
+
+.gitfiles__delta {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-left: auto;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+/* ---------------- diff viewer ---------------- */
+
+.gitdiff {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+}
+
+.gitdiff__head {
+  flex: none;
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 16px 20px 12px;
+  border-bottom: 1px solid #eef1f6;
+}
+
+.gitdiff__heading {
+  display: flex;
+  flex: 1 1 220px;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.gitdiff__filename,
+.gitdiff__path {
+  white-space: normal;
+  overflow-wrap: anywhere;
+  user-select: text;
+  color: #26313f;
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-size: 13.5px;
+  font-weight: 700;
+}
+
+.gitdiff__path {
+  color: #7b879b;
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.gitdiff__copy {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: #9aa5b6;
+  cursor: pointer;
+}
+
+.gitdiff__copy:hover {
+  background: #f1f3f7;
+  color: #4a5b73;
+}
+
+.gitdiff__totals {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+  font-size: 13.5px;
+  font-weight: 800;
+}
+
+.gitdiff__body {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  background: #fbfcfe;
+}
+
+.gitdiff__empty {
+  margin: 60px 0;
+  text-align: center;
+  color: #8d99ab;
+  font-size: 13px;
+}
+
+.gitdiff__code {
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-size: 12.5px;
+  line-height: 1.55;
+}
+
+.gitdiff__hunk-head {
+  padding: 7px 16px;
+  background: #eef2f8;
+  color: #5a6b82;
+  font-size: 12px;
+  white-space: pre;
+}
+
+.gitdiff__line {
+  display: flex;
+  white-space: pre;
+}
+
+.gitdiff__line--add {
+  background: #e9f7ed;
+}
+
+.gitdiff__line--del {
+  background: #fdecec;
+}
+
+.gitdiff__num {
+  flex: none;
+  width: 52px;
+  padding: 0 10px;
+  color: #a4aebd;
+  text-align: right;
+  user-select: none;
+}
+
+.gitdiff__sign {
+  flex: none;
+  width: 18px;
+  text-align: center;
+  color: #8d99ab;
+  user-select: none;
+}
+
+.gitdiff__line--add .gitdiff__sign {
+  color: #2f9e5f;
+}
+
+.gitdiff__line--del .gitdiff__sign {
+  color: #d14949;
+}
+
+.gitdiff__text {
+  flex: 1;
+  min-width: 0;
+  padding-right: 16px;
+  color: #26313f;
+}
+/* The counts are <em> elements: give them their own centred line box so the
+   larger chip font does not push them above the label baseline. */
+.gitfiles__chip em,
+.gitfiles__folder-count,
+.gitfiles__badge,
+.gitfiles__plus,
+.gitfiles__minus,
+.gitfiles__totals em,
+.gitdiff__totals em {
+  display: inline-flex;
+  align-items: center;
+  line-height: 1;
+}
+
+.gitfiles__count {
+  line-height: 1;
+}
+/* Latin digits sit on the cap-height while CJK glyphs fill the em box, so at the
+   same font-size the number reads as sitting high next to Chinese text. The few
+   rules below nudge the counts back onto the label\'s optical centre. */
+.gitfiles__chip em {
+  position: relative;
+  top: 1px;
+}
+
+.gitfiles__folder-count,
+.gitfiles__totals em,
+.gitdiff__totals em {
+  position: relative;
+  top: 1px;
+}
+/* The chip is a flex row, which turns the label and the count into two separate
+   boxes. Flex centres each box, but a digit\'s box is shorter than a CJK glyph\'s
+   and the two fonts sit differently inside them, so the number reads as high.
+   Letting the chip be plain inline text puts both back on one shared baseline. */
+.gitfiles__chip {
+  display: inline-block;
+  line-height: 30px;
+  padding: 0 12px;
+  text-align: center;
+}
+
+.gitfiles__chip em {
+  display: inline;
+  margin-left: 7px;
+  line-height: inherit;
+  position: static;
+  top: auto;
+  font-style: normal;
+}
+/* The list is a single flat column now: every row is a file, so the path detail
+   shown after the name is the folder it lives in. */
+.gitfiles__file {
+  height: 42px;
+  padding: 0 10px;
+}
+
+.gitfiles__name {
+  flex: none;
+}
+
+.gitfiles__folder-path {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #a4aebd;
+  font-size: 12px;
+}
+
+.gitfiles__delta {
+  flex: none;
+}
+
+.gitfiles__badge {
+  margin-left: 2px;
+}
+/* ---------------- nested file tree ---------------- */
+
+.gitfiles__tree {
+  padding: 6px 10px 16px;
+}
+
+.gitfiles__row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  height: 34px;
+  padding: 0 8px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+}
+
+.gitfiles__row:hover {
+  background: #f4f7fb;
+}
+
+.gitfiles__row--on {
+  background: #eef2ff;
+}
+
+/* One fixed-width dotted rule per level of depth, so children line up under
+   their folder even though the rows themselves are flat buttons. */
+.gitfiles__guide {
+  flex: none;
+  width: 14px;
+  height: 100%;
+  margin-left: 2px;
+  border-left: 1px dotted #d5dce6;
+}
+
+.gitfiles__caret {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  color: #97a2b3;
+  transition: transform 0.12s ease;
+}
+
+.gitfiles__caret--open {
+  transform: rotate(90deg);
+}
+
+.gitfiles__folder-icon {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  color: #7b8fae;
+}
+
+.gitfiles__name {
+  flex: none;
+  overflow: visible;
+  white-space: nowrap;
+  color: #26313f;
+  font-size: 13px;
+}
+
+.gitfiles__row--folder .gitfiles__name {
+  color: #33405a;
+  font-weight: 700;
+}
+
+.gitfiles__folder-count {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 24px;
+  height: 21px;
+  padding: 0 7px;
+  border-radius: 999px;
+  background: #eef2f8;
+  color: #5a6b82;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 800;
+}
+
+/* A folder has no badge, so its count keeps the row\'s right edge steady. */
+.gitfiles__row--folder .gitfiles__delta {
+  margin-left: 0;
+}
+
+.gitfiles__row--folder .gitfiles__delta {
+  width: 104px;
+  justify-content: flex-end;
+}
+
+.gitfiles__row--file .gitfiles__delta {
+  margin-left: auto;
+}
+
+.gitfiles__badge {
+  margin-left: auto;
+}
+
+.gitfiles__row--file .gitfiles__badge + .gitfiles__delta {
+  margin-left: 0;
+  width: 104px;
+  justify-content: flex-end;
+}
+
+.gitfiles__zero {
+  color: #b9c2cf;
+  font-style: normal;
+}
+
+.gitfiles__delta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  flex: none;
+  width: 104px;
+  font-size: 12.5px;
+  font-weight: 700;
+}
+/* Drag the divider to trade width between the file list and the diff. */
+.gitfiles__resizer {
+  position: relative;
+  align-self: stretch;
+  width: 8px;
+  z-index: 3;
+  cursor: col-resize;
+  touch-action: none;
+  user-select: none;
+  background: #f5f7fb;
+  border-inline: 1px solid #eef1f6;
+}
+
+.gitfiles__resizer:hover,
+.gitfiles--resizing .gitfiles__resizer {
+  background: rgba(76, 108, 247, 0.18);
+}
+
+.gitfiles__resizer:focus-visible {
+  outline: 2px solid #5d72e2;
+  outline-offset: -2px;
+}
+
+.gitfiles--resizing,
+.gitfiles--resizing * {
+  cursor: col-resize !important;
+}
+
+.gitfiles__pane {
+  position: relative;
+}
+
+.gitfiles {
+  grid-template-columns: 360px 8px minmax(0, 1fr);
+}
+/* Per-host connect action, sitting next to the remove button. */
+.ssh-connect__host-connect {
+  flex: none;
+  height: 26px;
+  margin-right: 6px;
+  padding: 0 10px;
+  border: 1px solid #c9d6fb;
+  border-radius: 7px;
+  background: #eef2ff;
+  color: #3f63df;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.ssh-connect__host-connect:hover:not(:disabled) {
+  background: #e0e8ff;
+}
+
+.ssh-connect__host-connect:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+/* "Disconnect" in the dialog header while a host is live. */
+.ssh-connect__disconnect {
+  flex: none;
+  height: 28px;
+  margin-right: 10px;
+  padding: 0 12px;
+  border: 1px solid #f3c9c9;
+  border-radius: 7px;
+  background: #fdecec;
+  color: #c14b4b;
+  font-size: 12.5px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.ssh-connect__disconnect:hover {
+  background: #fbdcdc;
+}
+/*
+ * Diff overflow fix.
+ *
+ * A flex item defaults to min-width:auto, so a long code line pushed the row
+ * wider than its container instead of scrolling inside it. The row then spilled
+ * out, which is why the line numbers were scrolled out of view entirely.
+ * Shrinking the chain and pinning the gutter keeps them visible while the code
+ * scrolls underneath.
+ */
+.gitdiff,
+.gitdiff__body,
+.gitdiff__code {
+  min-width: 0;
+}
+
+.gitdiff__line {
+  background: #fff;
+}
+
+.gitdiff__num,
+.gitdiff__sign {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  background: inherit;
+}
+
+.gitdiff__num:first-child {
+  left: 0;
+}
+
+.gitdiff__sign {
+  left: 52px;
+}
+
+.gitdiff__text {
+  padding-right: 24px;
+}
+/* git-diff-view integration: the package ships its own colours, so this only
+   has to seat it in the pane and match the surrounding chrome. */
+.gitdiff__viewer {
+  min-width: 0;
+  font-size: 12px;
+}
+
+.gitdiff__viewer .diff-view-wrapper,
+.gitdiff__viewer .diff-tailwindcss-wrapper {
+  min-width: 0;
+}
+
+/* Unified / split toggle, sitting left of the line totals. */
+.gitdiff__modes {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: auto;
+  padding: 3px;
+  border-radius: 9px;
+  background: #f1f3f7;
+}
+
+.gitdiff__mode {
+  height: 28px;
+  padding: 0 13px;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: #5a6b82;
+  font-size: 12.5px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.gitdiff__mode:hover {
+  color: #29405f;
+}
+
+.gitdiff__mode--on {
+  background: #fff;
+  color: #3f63df;
+  box-shadow: 0 1px 3px rgba(42, 65, 96, 0.14);
+}
+
+/* The totals now follow the toggle, so they only need a small gap. */
+.gitdiff__totals {
+  margin-left: 12px;
+}
+/*
+ * The viewer was mounting with no measurable height, so nothing showed. Give the
+ * wrapper a definite box and let the package scroll inside it. min-height is the
+ * belt-and-braces: even a short diff keeps a readable area.
+ */
+.gitdiff__viewer {
+  min-width: 0;
+  min-height: 200px;
+  height: 100%;
+  font-size: 12px;
+}
+
+.gitdiff__viewer > div {
+  min-height: 200px;
+}
+
+/* The package renders its own scroll container; this keeps it inside the pane. */
+.gitdiff__body {
+  display: flex;
+  flex-direction: column;
+}
+
+.gitdiff__body > .gitdiff__viewer {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+}
+/* The package scroll container has no height cap, so it grows to the full diff
+   height and its horizontal scrollbar ends up pinned to the bottom of the whole
+   document instead of the visible pane. Cap the chain to the pane, let the
+   package own both axes, and drop the now-redundant outer scroller. */
+.gitdiff__body > .gitdiff__viewer {
+  overflow: hidden;
+}
+
+.gitdiff__viewer > div,
+.gitdiff__viewer .diff-style-root,
+.gitdiff__viewer .diff-view-wrapper,
+.gitdiff__viewer .unified-diff-view,
+.gitdiff__viewer .split-diff-view {
+  min-height: 0;
+  height: 100%;
+}
+
+.gitdiff__viewer .unified-diff-table-wrapper,
+.gitdiff__viewer .old-diff-table-wrapper,
+.gitdiff__viewer .new-diff-table-wrapper {
+  height: 100%;
+  overflow-y: auto;
+}
+/* Injected prompt search highlighting. */
+::highlight(prompt-search-match) {
+  background: #ffe58f;
+  color: inherit;
+}
+
+::highlight(prompt-search-active) {
+  background: #ffb84d;
+  color: inherit;
+}
+
+/* Placeholder toggle in the AI chat toolbar. */
+.toolbar .toolbar__toggle {
+  position: relative;
+  width: 38px;
+  height: 22px;
+  padding: 0;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.toolbar__toggle-icon {
+  width: 16px;
+  height: 16px;
+  display: block;
+  margin: auto;
+}
+
+.toolbar .toolbar__toggle--on {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* 未设置头像时的默认占�?*/
+.settings-avatar-preview-img--empty { display:grid; place-items:center; position:relative; box-sizing:border-box; background:#e9eaee; border:1px solid #dfe1e6; color:#8b8f97; cursor:pointer; }
+.settings-avatar-preview-img--empty > svg { width:30px; height:30px; }
+.settings-avatar-badge { position:absolute; right:-2px; bottom:-2px; width:22px; height:22px; display:grid; place-items:center; border-radius:50%; background:#1a73e8; border:2px solid #fff; color:#fff; }
+.settings-avatar-badge svg { width:11px; height:11px; }
+.workspace[data-theme='dark'] .settings-avatar-preview-img--empty { background:#1b2532; border-color:#33415a; color:#7f8ca0; }
+.workspace[data-theme='dark'] .settings-avatar-badge { border-color:#0f1620; }
+
+.settings-avatar-preview-img--clickable { cursor:pointer; }
+
+.conversation-message__attachment-trigger {
+  display: block;
+  max-width: min(100%, 420px);
+  padding: 0;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  cursor: zoom-in;
+  line-height: 0;
+}
+
+.conversation-message__attachment-trigger:focus-visible {
+  outline: 2px solid #6f8fc7;
+  outline-offset: 3px;
+}
+
+.conversation-attachment-preview {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px;
+  background: rgba(12, 18, 28, 0.86);
+  backdrop-filter: blur(6px);
+  cursor: zoom-out;
+  overscroll-behavior: contain;
+}
+
+.conversation-attachment-preview__image {
+  display: block;
+  max-width: calc(100vw - 64px);
+  max-height: calc(100vh - 64px);
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  border-radius: 12px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.42);
+  cursor: default;
+  user-select: none;
+}
+
+.conversation-attachment-preview__close {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 50%;
+  background: rgba(24, 31, 43, 0.76);
+  color: #fff;
+  font-size: 28px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.conversation-attachment-preview__close:hover {
+  background: rgba(54, 64, 80, 0.92);
+}
+
+.conversation-attachment-preview__close:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+/* Smooth handoff between the native chat view and the backup transcript. */
+.stage__alternate-card {
+  animation: stage-alternate-enter 180ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  will-change: opacity, transform;
+}
+
+.stage__alternate-card--leaving {
+  pointer-events: none;
+  animation: stage-alternate-leave 150ms cubic-bezier(0.4, 0, 1, 1) both;
+}
+
+@keyframes stage-alternate-enter {
+  from {
+    opacity: 0;
+    transform: translateY(7px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes stage-alternate-leave {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+}
+
+.toolbar .toolbar__toggle {
+  transition: border-color 160ms ease, background-color 160ms ease, box-shadow 160ms ease, transform 120ms ease;
+}
+
+.toolbar .toolbar__toggle:active {
+  transform: scale(0.94);
+}
+
+.toolbar__toggle-icon {
+  transition: transform 180ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.toolbar__toggle--on .toolbar__toggle-icon {
+  transform: rotate(180deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stage__alternate-card,
+  .stage__alternate-card--leaving {
+    animation-duration: 1ms;
+  }
+
+  .toolbar .toolbar__toggle,
+  .toolbar__toggle-icon {
+    transition-duration: 1ms;
+  }
+}
+
+/* ---------------- dark theme: remaining light-only surfaces ---------------- */
+
+/* Confirmation and session creation dialogs. */
+.workspace[data-theme='dark'] .confirm-dialog,
+.workspace[data-theme='dark'] .new-session-modal,
+.workspace[data-theme='dark'] .modal--notes,
+.workspace[data-theme='dark'] .modal--prompt,
+.workspace[data-theme='dark'] .ssh-connect-overlay,
+.workspace[data-theme='dark'] .modal--ssh-files,
+.workspace[data-theme='dark'] .transfer-modal {
+  background: rgba(3, 7, 12, .72) !important;
+}
+
+.workspace[data-theme='dark'] .confirm-dialog__box {
+  border-color: #334154;
+  background: #111923;
+  color: #e7edf7;
+  box-shadow: 0 26px 80px rgba(0, 0, 0, .48);
+}
+
+.workspace[data-theme='dark'] .confirm-dialog__close {
+  color: #9fb0c6;
+}
+
+.workspace[data-theme='dark'] .confirm-dialog__close:hover:not(:disabled) {
+  color: #f1f5ff;
+}
+
+.workspace[data-theme='dark'] .confirm-dialog__icon {
+  background: #1b2940;
+  color: #9db8ff;
+}
+
+.workspace[data-theme='dark'] .confirm-dialog__icon--danger {
+  background: #38232b;
+  color: #ff9ca5;
+}
+
+.workspace[data-theme='dark'] .confirm-dialog__title {
+  color: #e7edf7;
+}
+
+.workspace[data-theme='dark'] .confirm-dialog__description,
+.workspace[data-theme='dark'] .confirm-dialog__item-label {
+  color: #c5d4e8;
+}
+
+.workspace[data-theme='dark'] .confirm-dialog__items {
+  border-color: #2d3a4d;
+  background: #151e2b;
+}
+
+.workspace[data-theme='dark'] .confirm-dialog__item {
+  border-bottom-color: #2d3a4d;
+}
+
+.workspace[data-theme='dark'] .confirm-dialog__item-icon {
+  color: #9fb0c6;
+}
+
+.workspace[data-theme='dark'] .confirm-dialog__badge--danger {
+  background: #38232b;
+  color: #ff9ca5;
+}
+
+.workspace[data-theme='dark'] .confirm-dialog__badge--success {
+  background: #17352f;
+  color: #72ddb1;
+}
+
+.workspace[data-theme='dark'] .confirm-dialog__badge--neutral {
+  background: #1d2a39;
+  color: #b9c9df;
+}
+
+.workspace[data-theme='dark'] .confirm-dialog__foot {
+  border-top-color: #2d3a4d;
+}
+
+.workspace[data-theme='dark'] .confirm-dialog__cancel {
+  border-color: #405675;
+  background: #182436;
+  color: #dce8fa;
+}
+
+.workspace[data-theme='dark'] .confirm-dialog__cancel:hover:not(:disabled) {
+  background: #223653;
+}
+
+.workspace[data-theme='dark'] .new-session-modal__box {
+  border-color: #334154;
+  background: #111923;
+  box-shadow: 0 28px 80px rgba(0, 0, 0, .48);
+}
+
+.workspace[data-theme='dark'] .new-session-modal__header h2,
+.workspace[data-theme='dark'] .new-session-modal__title-row strong {
+  color: #e7edf7;
+}
+
+.workspace[data-theme='dark'] .new-session-modal__header p,
+.workspace[data-theme='dark'] .new-session-modal__content small,
+.workspace[data-theme='dark'] .new-session-modal__footer {
+  color: #98a6ba;
+}
+
+.workspace[data-theme='dark'] .new-session-modal__close {
+  color: #9fb0c6;
+}
+
+.workspace[data-theme='dark'] .new-session-modal__close:hover {
+  background: #1e2c40;
+  color: #f1f5ff;
+}
+
+.workspace[data-theme='dark'] .new-session-modal__option,
+.workspace[data-theme='dark'] .new-session-modal__option--local {
+  border-color: #405675;
+  background: #182436;
+  color: #e7edf7;
+  box-shadow: none;
+}
+
+.workspace[data-theme='dark'] .new-session-modal__option:hover {
+  border-color: #6d95ff;
+  background: #223653;
+}
+
+.workspace[data-theme='dark'] .new-session-modal__accent {
+  background: #6d95ff;
+}
+
+.workspace[data-theme='dark'] .new-session-modal__icon {
+  background: #223452;
+  color: #a9c7ff;
+}
+
+.workspace[data-theme='dark'] .new-session-modal__option--ssh .new-session-modal__icon {
+  background: #183b3d;
+  color: #72ddb1;
+}
+
+.workspace[data-theme='dark'] .new-session-modal__badge {
+  background: #263449;
+  color: #b9c9df;
+}
+
+.workspace[data-theme='dark'] .new-session-modal__badge--recommended {
+  background: #17352f;
+  color: #72ddb1;
+}
+
+.workspace[data-theme='dark'] .new-session-modal__arrow {
+  color: #9fb0c6;
+}
+
+.workspace[data-theme='dark'] .new-session-modal__footer {
+  border-top-color: #2d3a4d;
+}
+
+.workspace[data-theme='dark'] .new-session-modal__info {
+  border-color: #667b99;
+  color: #a9b8ce;
+}
+
+/* Transfer task dialog and cards. */
+.workspace[data-theme='dark'] .transfer-modal__box {
+  border-color: #334154;
+  background: #111923;
+  color: #e7edf7;
+  box-shadow: 0 24px 72px rgba(0, 0, 0, .48);
+}
+
+.workspace[data-theme='dark'] .transfer-modal__head {
+  border-bottom-color: #2d3a4d;
+}
+
+.workspace[data-theme='dark'] .transfer-modal__title,
+.workspace[data-theme='dark'] .transfer-card__name {
+  color: #e7edf7;
+}
+
+.workspace[data-theme='dark'] .transfer-modal__active-count,
+.workspace[data-theme='dark'] .transfer-card__status,
+.workspace[data-theme='dark'] .transfer-card__status--completed {
+  background: #17352f;
+  color: #72ddb1;
+}
+
+.workspace[data-theme='dark'] .transfer-modal__close {
+  border-color: #405675;
+  background: #182436;
+  color: #c9d5e8;
+}
+
+.workspace[data-theme='dark'] .transfer-modal__close:hover {
+  background: #223653;
+}
+
+.workspace[data-theme='dark'] .transfer-card {
+  border-color: #2d3a4d;
+  background: #151e2b;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, .2);
+}
+
+.workspace[data-theme='dark'] .transfer-card__direction--download {
+  background: #1b3154;
+  color: #9fc2ff;
+}
+
+.workspace[data-theme='dark'] .transfer-card__direction--upload {
+  background: #17352f;
+  color: #72ddb1;
+}
+
+.workspace[data-theme='dark'] .transfer-card__percent {
+  color: #a9c7ff;
+}
+
+.workspace[data-theme='dark'] .transfer-card__cancel {
+  border-left-color: #405675;
+  color: #ff9ca5;
+}
+
+.workspace[data-theme='dark'] .transfer-card__session,
+.workspace[data-theme='dark'] .transfer-card__meta,
+.workspace[data-theme='dark'] .transfer-modal__empty {
+  color: #98a6ba;
+}
+
+.workspace[data-theme='dark'] .transfer-card__progress {
+  background: #263449;
+}
+
+.workspace[data-theme='dark'] .transfer-card--failed .transfer-card__progress > span,
+.workspace[data-theme='dark'] .transfer-card--cancelled .transfer-card__progress > span {
+  background: #445166;
+}
+
+.workspace[data-theme='dark'] .transfer-card__meta > i {
+  background: #405675;
+}
+
+.workspace[data-theme='dark'] .transfer-card__status--failed {
+  background: #38232b;
+  color: #ff9ca5;
+}
+
+.workspace[data-theme='dark'] .transfer-card__status--cancelled {
+  background: #263449;
+  color: #a9b8ce;
+}
+
+.workspace[data-theme='dark'] .transfer-card__error {
+  color: #ff9da7;
+}
+
+.workspace[data-theme='dark'] .transfer-modal__empty-icon {
+  background: #22264c;
+  color: #a9a5ff;
+}
+
+.workspace[data-theme='dark'] .transfer-modal__empty strong {
+  color: #cbd8ea;
+}
+
+/* SSH connection dialog. */
+.workspace[data-theme='dark'] .ssh-connect-modal {
+  border-color: #334154;
+  background: #111923;
+  color: #e7edf7;
+  box-shadow: 0 24px 72px rgba(0, 0, 0, .48);
+}
+
+.workspace[data-theme='dark'] .ssh-connect__head,
+.workspace[data-theme='dark'] .ssh-connect__sidebar,
+.workspace[data-theme='dark'] .ssh-connect__form,
+.workspace[data-theme='dark'] .ssh-connect__foot {
+  background: #111923;
+  border-color: #2d3a4d;
+}
+
+.workspace[data-theme='dark'] .ssh-connect__close {
+  border-color: #405675;
+  background: #182436;
+  color: #c9d5e8;
+}
+
+.workspace[data-theme='dark'] .ssh-connect__close:hover {
+  background: #223653;
+  border-color: #6d95ff;
+}
+
+.workspace[data-theme='dark'] .ssh-connect__host--active {
+  background: linear-gradient(90deg, #1b2d4d 0%, #182436 100%);
+  box-shadow: inset 3px 0 0 #6d95ff;
+}
+
+.workspace[data-theme='dark'] .ssh-connect__host-main:hover {
+  background: #1e2c40;
+}
+
+.workspace[data-theme='dark'] .ssh-connect__host-copy strong,
+.workspace[data-theme='dark'] .ssh-connect__field > span,
+.workspace[data-theme='dark'] .ssh-connect__advanced-toggle {
+  color: #dce8f8;
+}
+
+.workspace[data-theme='dark'] .ssh-connect__host-copy small,
+.workspace[data-theme='dark'] .ssh-connect__section-title {
+  color: #98a6ba;
+}
+
+.workspace[data-theme='dark'] .ssh-connect__host-icon {
+  background: #3d4d65;
+}
+
+.workspace[data-theme='dark'] .ssh-connect__host--active .ssh-connect__host-icon {
+  background: #b9852b;
+}
+
+.workspace[data-theme='dark'] .ssh-connect__saved {
+  background: #17352f;
+  color: #72ddb1;
+}
+
+.workspace[data-theme='dark'] .ssh-connect__host-remove {
+  background: #1a2534;
+  color: #98a6ba;
+}
+
+.workspace[data-theme='dark'] .ssh-connect__host-remove:hover {
+  background: #38232b;
+  color: #ff9ca5;
+}
+
+.workspace[data-theme='dark'] .ssh-connect__new,
+.workspace[data-theme='dark'] .ssh-connect__cancel {
+  background: #182436;
+  border-color: #405675;
+  color: #dce8fa;
+}
+
+.workspace[data-theme='dark'] .ssh-connect__new:hover,
+.workspace[data-theme='dark'] .ssh-connect__cancel:hover {
+  background: #223653;
+  border-color: #6d95ff;
+}
+
+.workspace[data-theme='dark'] .ssh-connect__host-connect {
+  border-color: #40589e;
+  background: #1b2d4d;
+  color: #a9c7ff;
+}
+
+.workspace[data-theme='dark'] .ssh-connect__host-connect:hover:not(:disabled) {
+  background: #223653;
+}
+
+.workspace[data-theme='dark'] .ssh-connect__disconnect {
+  border-color: #6e3b49;
+  background: #38232b;
+  color: #ff9ca5;
+}
+
+.workspace[data-theme='dark'] .ssh-connect__disconnect:hover {
+  background: #4a2935;
+}
+
+.workspace[data-theme='dark'] .ssh-connect__advanced {
+  border-color: #344760;
+  background: #151e2b;
+}
+
+.workspace[data-theme='dark'] .ssh-connect__input {
+  background: #0d141e !important;
+  border-color: #344258 !important;
+  color: #e7edf7 !important;
+  box-shadow: none;
+}
+
+.workspace[data-theme='dark'] .ssh-connect__input::placeholder {
+  color: #71819a;
+}
+
+.workspace[data-theme='dark'] .ssh-connect__input:focus {
+  border-color: #6d95ff !important;
+  box-shadow: 0 0 0 3px rgba(109, 149, 255, .18) !important;
+}
+
+/* Markdown notes editor: the light reference skin used !important, so override
+   every editor layer explicitly in dark mode. */
+.workspace[data-theme='dark'] .notes-modal {
+  border-color: #334154;
+  background: #111923;
+  color: #e7edf7;
+}
+
+.workspace[data-theme='dark'] .notes-modal__head,
+.workspace[data-theme='dark'] .notes-modal__editor-wrap,
+.workspace[data-theme='dark'] .notes-modal__foot {
+  background: #111923 !important;
+  border-color: #2d3a4d !important;
+}
+
+.workspace[data-theme='dark'] .notes-modal__title {
+  color: #e7edf7;
+}
+
+.workspace[data-theme='dark'] .notes-modal__scope {
+  background: #17352f;
+  color: #72ddb1;
+}
+
+.workspace[data-theme='dark'] .notes-modal__saved,
+.workspace[data-theme='dark'] .notes-modal__subtitle {
+  color: #98a6ba;
+}
+
+.workspace[data-theme='dark'] .notes-modal__saved span {
+  color: #71819a;
+}
+
+.workspace[data-theme='dark'] .notes-modal__saved--ok span {
+  color: #72ddb1;
+}
+
+.workspace[data-theme='dark'] .notes-modal__close,
+.workspace[data-theme='dark'] .notes-modal__preview-toggle,
+.workspace[data-theme='dark'] .notes-modal__button:not(.notes-modal__button--primary) {
+  color: #c9d5e8;
+}
+
+.workspace[data-theme='dark'] .notes-modal__close:hover,
+.workspace[data-theme='dark'] .notes-modal__preview-toggle:hover,
+.workspace[data-theme='dark'] .notes-modal__preview-toggle--on,
+.workspace[data-theme='dark'] .notes-modal__button:hover:not(:disabled):not(.notes-modal__button--primary) {
+  background: #1e2c40;
+  color: #f1f5ff;
+}
+
+.workspace[data-theme='dark'] .notes-modal__preview-toggle,
+.workspace[data-theme='dark'] .notes-modal__button:not(.notes-modal__button--primary) {
+  border-color: #405675;
+  background: #182436;
+}
+
+.workspace[data-theme='dark'] .notes-modal .w-md-editor,
+.workspace[data-theme='dark'] .notes-modal .w-md-editor-toolbar,
+.workspace[data-theme='dark'] .notes-modal .w-md-editor-content,
+.workspace[data-theme='dark'] .notes-modal .w-md-editor-area,
+.workspace[data-theme='dark'] .notes-modal .w-md-editor-preview,
+.workspace[data-theme='dark'] .notes-modal .wmde-markdown {
+  border-color: #2d3a4d !important;
+  background: #0d141e !important;
+  color: #dce8f8 !important;
+}
+
+.workspace[data-theme='dark'] .notes-modal .w-md-editor-toolbar li > button {
+  color: #b9c9df !important;
+}
+
+.workspace[data-theme='dark'] .notes-modal .w-md-editor-toolbar li > button:hover {
+  background: #1e2c40 !important;
+}
+
+.workspace[data-theme='dark'] .notes-modal .w-md-editor-text-pre > code,
+.workspace[data-theme='dark'] .notes-modal .w-md-editor-text-input {
+  color: #dce8f8 !important;
+  -webkit-text-fill-color: #dce8f8 !important;
+}
+
+.workspace[data-theme='dark'] .notes-modal .w-md-editor-text-input::placeholder {
+  color: #71819a !important;
+  -webkit-text-fill-color: #71819a !important;
+}
+
+.workspace[data-theme='dark'] .notes-modal__button--primary {
+  border-color: #6d95ff;
+  background: linear-gradient(135deg, #6d95ff, #4d70dc);
+  color: #fff;
+}
+
+/* Prompt viewer and its Markdown content. */
+.workspace[data-theme='dark'] .prompt-modal {
+  border-color: #334154;
+  background: #111923 !important;
+  color: #e7edf7;
+  box-shadow: 0 28px 90px rgba(0, 0, 0, .5);
+}
+
+.workspace[data-theme='dark'] .prompt-modal__head,
+.workspace[data-theme='dark'] .prompt-modal__search {
+  border-color: #2d3a4d;
+  background: #111923 !important;
+}
+
+.workspace[data-theme='dark'] .prompt-modal__title {
+  color: #e7edf7;
+}
+
+.workspace[data-theme='dark'] .prompt-modal__readonly {
+  background: #263449;
+  color: #b9c9df;
+}
+
+.workspace[data-theme='dark'] .prompt-modal__action {
+  border-color: #405675;
+  background: #182436;
+  color: #c9d5e8;
+  box-shadow: none;
+}
+
+.workspace[data-theme='dark'] .prompt-modal__action:hover,
+.workspace[data-theme='dark'] .prompt-modal__action--active {
+  border-color: #6d95ff;
+  background: #223653;
+  color: #dbe8ff;
+}
+
+.workspace[data-theme='dark'] .prompt-modal__action--success {
+  border-color: #3c765f;
+  background: #17352f;
+  color: #72ddb1;
+}
+
+.workspace[data-theme='dark'] .prompt-modal__close {
+  color: #9fb0c6;
+}
+
+.workspace[data-theme='dark'] .prompt-modal__close:hover {
+  color: #f1f5ff;
+}
+
+.workspace[data-theme='dark'] .prompt-modal__search input {
+  color: #dce8f8 !important;
+}
+
+.workspace[data-theme='dark'] .prompt-modal__search input::placeholder,
+.workspace[data-theme='dark'] .prompt-modal__search-hint {
+  color: #71819a;
+}
+
+.workspace[data-theme='dark'] .prompt-modal__search > button {
+  color: #9fb0c6;
+}
+
+.workspace[data-theme='dark'] .prompt-modal__body {
+  background: #0d141e !important;
+  scrollbar-color: #3b4a60 transparent;
+}
+
+.workspace[data-theme='dark'] .prompt-modal__body .wmde-markdown,
+.workspace[data-theme='dark'] .prompt-modal__body .wmde-markdown pre {
+  background: #0d141e !important;
+  color: #dce8f8 !important;
+}
+
+.workspace[data-theme='dark'] .prompt-modal__body .wmde-markdown h1,
+.workspace[data-theme='dark'] .prompt-modal__body .wmde-markdown h2,
+.workspace[data-theme='dark'] .prompt-modal__body .wmde-markdown h3 {
+  color: #e7edf7 !important;
+}
+
+.workspace[data-theme='dark'] .prompt-modal__body .wmde-markdown strong {
+  color: #f0f5ff !important;
+}
+
+.workspace[data-theme='dark'] .prompt-modal__body .wmde-markdown code:not(pre code) {
+  background: #22264c !important;
+  color: #b9c5ff !important;
+}
+
+.workspace[data-theme='dark'] .prompt-modal__body .wmde-markdown pre {
+  border-color: #344760 !important;
+  background: #151e2b !important;
+}
+
+.workspace[data-theme='dark'] .prompt-modal__body .wmde-markdown pre code {
+  background: transparent !important;
+  color: #c5d4e8 !important;
+}
+
+.workspace[data-theme='dark'] .prompt-modal__scroll-hint {
+  background: rgba(24, 36, 54, .92);
+  color: #98a6ba;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, .24);
+}
+
+/* Remote file browser. Both the custom reference table and the hidden/underlying
+   SVAR file manager need a dark surface because the library owns its DOM. */
+.workspace[data-theme='dark'] .ssh-files-modal,
+.workspace[data-theme='dark'] .ssh-files-modal__head,
+.workspace[data-theme='dark'] .ssh-files,
+.workspace[data-theme='dark'] .ssh-files__browser,
+.workspace[data-theme='dark'] .ssh-files__browser > * {
+  border-color: #2d3a4d;
+  background: #111923 !important;
+  color: #e7edf7;
+}
+
+.workspace[data-theme='dark'] .ssh-files-modal__title,
+.workspace[data-theme='dark'] .ssh-files__sidebar-title,
+.workspace[data-theme='dark'] .ssh-files__crumb-current,
+.workspace[data-theme='dark'] .ssh-files__table-file-name {
+  color: #e7edf7;
+}
+
+.workspace[data-theme='dark'] .ssh-files-modal__path,
+.workspace[data-theme='dark'] .ssh-files__crumb-sep,
+.workspace[data-theme='dark'] .ssh-files__loading {
+  color: #98a6ba;
+}
+
+.workspace[data-theme='dark'] .ssh-files-modal__close,
+.workspace[data-theme='dark'] .ssh-files__sidebar-action {
+  border-color: #405675;
+  background: #182436;
+  color: #c9d5e8;
+}
+
+.workspace[data-theme='dark'] .ssh-files-modal__close:hover,
+.workspace[data-theme='dark'] .ssh-files__sidebar-action:hover {
+  border-color: #6d95ff;
+  background: #223653;
+  color: #f1f5ff;
+}
+
+.workspace[data-theme='dark'] .ssh-files__crumbs,
+.workspace[data-theme='dark'] .ssh-files__view-modes,
+.workspace[data-theme='dark'] .ssh-files__reference-table,
+.workspace[data-theme='dark'] .ssh-files__table-head,
+.workspace[data-theme='dark'] .ssh-files__table-row {
+  border-color: #2d3a4d;
+  background: #151e2b;
+  color: #c5d4e8;
+}
+
+.workspace[data-theme='dark'] .ssh-files__crumb-home {
+  stroke: #a9c7ff;
+}
+
+.workspace[data-theme='dark'] .ssh-files__search input {
+  border-color: #344258;
+  background: #0d141e;
+  color: #e7edf7;
+}
+
+.workspace[data-theme='dark'] .ssh-files__search svg {
+  stroke: #98a6ba;
+}
+
+.workspace[data-theme='dark'] .ssh-files__search input::placeholder {
+  color: #71819a;
+}
+
+.workspace[data-theme='dark'] .ssh-files__view-modes button {
+  border-right-color: #2d3a4d;
+  color: #9fb0c6;
+}
+
+.workspace[data-theme='dark'] .ssh-files__view-modes button:hover {
+  background: #1e2c40;
+}
+
+.workspace[data-theme='dark'] .ssh-files__view-modes button.is-active {
+  background: #5d7df5;
+  color: #fff;
+}
+
+.workspace[data-theme='dark'] .ssh-files__table-head {
+  background: #1b283a;
+  color: #c5d4e8;
+}
+
+.workspace[data-theme='dark'] .ssh-files__table-row {
+  border-bottom-color: #2d3a4d;
+  background: #151e2b;
+}
+
+.workspace[data-theme='dark'] .ssh-files__table-row:hover {
+  background: #1e2c40;
+}
+
+.workspace[data-theme='dark'] .ssh-files__table-check {
+  border-color: #667b99;
+  background: #0d141e;
+}
+
+.workspace[data-theme='dark'] .ssh-files__table-file-name svg path:first-child {
+  fill: #6d95ff;
+}
+
+.workspace[data-theme='dark'] .ssh-files__table-file-name svg path:last-child {
+  fill: #8fa6ff;
+}
+
+.workspace[data-theme='dark'] .ssh-files__table-more:hover {
+  background: #223653;
+}
+
+.workspace[data-theme='dark'] .ssh-files__directory-loading {
+  background: rgba(13, 20, 30, .88);
+  color: #b9c9df;
+}
+
+.workspace[data-theme='dark'] .ssh-files__directory-spinner {
+  border-color: #344760;
+  border-top-color: #6d95ff;
+}
+
+.workspace[data-theme='dark'] .ssh-files__browser .wx-willow-theme {
+  --wx-color-primary: #6d95ff;
+  --wx-background: #111923;
+  --wx-background-alt: #151e2b;
+  --wx-border: #2d3a4d;
+  --wx-font-color: #e7edf7;
+  --wx-font-color-secondary: #98a6ba;
+  --wx-fm-background: #111923;
+  --wx-fm-select-background: #223653;
+  --wx-fm-grid-border: 1px solid #2d3a4d;
+  --wx-fm-grid-header-color: #1b283a;
+  --wx-fm-button-font-color: #98a6ba;
+}
+
+.workspace[data-theme='dark'] .ssh-files__browser .wx-filemanager,
+.workspace[data-theme='dark'] .ssh-files__browser .wx-toolbar,
+.workspace[data-theme='dark'] .ssh-files__browser .wx-list,
+.workspace[data-theme='dark'] .ssh-files__browser .wx-table,
+.workspace[data-theme='dark'] .ssh-files__browser .wx-row {
+  background: #111923 !important;
+  color: #dce8f8 !important;
+  border-color: #2d3a4d !important;
+}
+
+/* Git changed-files view. The log had a dark skin already, but this sibling view
+   was still entirely the light reference palette. */
+.git-dialog.git-dialog--dark {
+  background: rgba(3, 7, 12, .72);
+}
+
+.git-dialog--dark .git-dialog__pill,
+.git-dialog--dark .gitfiles__chip,
+.git-dialog--dark .gitdiff__modes {
+  border-color: #344760;
+  background: #182436;
+  color: #b9c9df;
+}
+
+.git-dialog--dark .git-dialog__pill--branch,
+.git-dialog--dark .gitfiles__chip--on,
+.git-dialog--dark .gitdiff__mode--on {
+  border-color: #40589e;
+  background: #1b2d4d;
+  color: #a9c7ff;
+}
+
+.git-dialog--dark .git-dialog__pill--dirty {
+  border-color: #725d31;
+  background: #332b1d;
+  color: #f2cc60;
+}
+
+.git-dialog--dark .git-dialog__copy,
+.git-dialog--dark .git-dialog__path,
+.git-dialog--dark .gitfiles__search,
+.git-dialog--dark .gitfiles__caret,
+.git-dialog--dark .gitfiles__folder-icon,
+.git-dialog--dark .gitdiff__copy,
+.git-dialog--dark .gitdiff__mode {
+  color: #8fa1bb;
+}
+
+.git-dialog--dark .git-dialog__path:hover,
+.git-dialog--dark .git-dialog__path:hover .git-dialog__copy,
+.git-dialog--dark .gitfiles__chip:hover,
+.git-dialog--dark .gitdiff__copy:hover {
+  color: #b9d0ff;
+}
+
+.git-dialog--dark .gitdiff__copy:hover {
+  background: #223044;
+}
+
+.git-dialog--dark .gitdiff__mode:hover {
+  color: #dbe8ff;
+}
+
+.git-dialog--dark .git-dialog__close:hover,
+.git-dialog--dark .gitlog__more:hover {
+  background: #223044;
+}
+
+.git-dialog--dark .gitlog__dashed,
+.git-dialog--dark .gitlog__dashed-down {
+  border-color: #536783;
+}
+
+.git-dialog--dark .gitlog__chip--mod {
+  background: #332b1d;
+  color: #f2cc60;
+}
+
+.git-dialog--dark .gitlog__chip--add {
+  background: #17352f;
+  color: #72ddb1;
+}
+
+.git-dialog--dark .gitlog__more {
+  color: #8fa1bb;
+}
+
+.git-dialog--dark .gitlog__avatar {
+  background: #253247 !important;
+  color: #c9d8ff !important;
+}
+
+.git-dialog--dark .gitfiles__pane,
+.git-dialog--dark .gitdiff__head {
+  border-color: #2d3a4d;
+}
+
+.git-dialog--dark .gitfiles__resizer {
+  background: #151e2a;
+  border-color: #2d3a4d;
+}
+
+.git-dialog--dark .gitfiles__resizer:hover,
+.git-dialog--dark .gitfiles--resizing .gitfiles__resizer {
+  background: #334b78;
+}
+
+.git-dialog--dark .gitfiles__title,
+.git-dialog--dark .gitdiff__filename,
+.git-dialog--dark .gitdiff__path,
+.git-dialog--dark .gitfiles__name,
+.git-dialog--dark .gitfiles__row--folder .gitfiles__name,
+.git-dialog--dark .gitdiff__text {
+  color: #dce8f8;
+}
+
+.git-dialog--dark .gitfiles__count,
+.git-dialog--dark .gitfiles__folder-count {
+  background: #1b2d4d;
+  color: #a9c7ff;
+}
+
+.git-dialog--dark .gitfiles__search {
+  border-color: #344760;
+}
+
+.git-dialog--dark .gitfiles__search input {
+  color: #dce8f8;
+}
+
+.git-dialog--dark .gitfiles__search input::placeholder,
+.git-dialog--dark .gitfiles__none,
+.git-dialog--dark .gitfiles__folder-count,
+.git-dialog--dark .gitfiles__folder-path {
+  color: #8fa1bb;
+}
+
+.git-dialog--dark .gitfiles__row:hover,
+.git-dialog--dark .gitfiles__folder:hover,
+.git-dialog--dark .gitfiles__file:hover {
+  background: #1e2c40;
+}
+
+.git-dialog--dark .gitfiles__row--on,
+.git-dialog--dark .gitfiles__file--on {
+  background: #1b2d4d;
+}
+
+.git-dialog--dark .gitfiles__guide {
+  border-left-color: #405675;
+}
+
+.git-dialog--dark .gitfiles__ext--ts {
+  background: #1b3154;
+  color: #9fc2ff;
+}
+
+.git-dialog--dark .gitfiles__ext--tsx {
+  background: #183b3d;
+  color: #72ddb1;
+}
+
+.git-dialog--dark .gitfiles__ext--json {
+  background: #332b1d;
+  color: #f2cc60;
+}
+
+.git-dialog--dark .gitfiles__ext--doc {
+  background: #263449;
+  color: #b9c9df;
+}
+
+.git-dialog--dark .gitfiles__badge--mod {
+  background: #332b1d;
+  color: #f2cc60;
+}
+
+.git-dialog--dark .gitfiles__badge--add {
+  background: #17352f;
+  color: #72ddb1;
+}
+
+.git-dialog--dark .gitfiles__badge--del {
+  background: #38232b;
+  color: #ff9ca5;
+}
+
+.git-dialog--dark .gitfiles__badge--ren {
+  background: #22264c;
+  color: #b9c5ff;
+}
+
+.git-dialog--dark .gitfiles__zero {
+  color: #667b99;
+}
+
+.git-dialog--dark .gitdiff__body {
+  background: #0d141e;
+}
+
+.git-dialog--dark .gitfiles {
+  background: #0f141c;
+}
+
+.git-dialog--dark .gitdiff__line {
+  background: #0d141e;
+}
+
+.git-dialog--dark .gitdiff__empty {
+  color: #8fa1bb;
+}
+
+.git-dialog--dark .gitdiff__hunk-head {
+  background: #1b283a;
+  color: #a9b8ce;
+}
+
+.git-dialog--dark .gitdiff__line--add {
+  background: #17352f;
+}
+
+.git-dialog--dark .gitdiff__line--del {
+  background: #38232b;
+}
+
+.git-dialog--dark .gitdiff__num,
+.git-dialog--dark .gitdiff__sign {
+  color: #71819a;
+}
+
+.git-dialog--dark .gitdiff__line--add .gitdiff__sign {
+  color: #72ddb1;
+}
+
+.git-dialog--dark .gitdiff__line--del .gitdiff__sign {
+  color: #ff9ca5;
+}
+
+/* Session manager has its own dashboard skin; cover the remaining badges and
+   controls that were still using the light palette. */
+.workspace[data-theme='dark'] .manager-session-icon {
+  background: #22264c;
+  color: #a9a5ff;
+}
+
+.workspace[data-theme='dark'] .manager-session-icon--ssh {
+  background: #17352f;
+  color: #72ddb1;
+}
+
+.workspace[data-theme='dark'] .manager-session-platform,
+.workspace[data-theme='dark'] .manager-status,
+.workspace[data-theme='dark'] .manager-target,
+.workspace[data-theme='dark'] .manager-created {
+  color: #98a6ba;
+}
+
+.workspace[data-theme='dark'] .manager-status--running {
+  color: #72ddb1;
+}
+
+.workspace[data-theme='dark'] .manager-kind {
+  background: #263449;
+  color: #b9c9df;
+}
+
+.workspace[data-theme='dark'] .manager-kind--ssh {
+  background: #17352f;
+  color: #72ddb1;
+}
+
+.workspace[data-theme='dark'] .manager-action,
+.workspace[data-theme='dark'] .manager-rename__input,
+.workspace[data-theme='dark'] .manager-rename button {
+  border-color: #405675;
+  background: #182436;
+  color: #c9d5e8;
+}
+
+.workspace[data-theme='dark'] .manager-action:hover:not(:disabled),
+.workspace[data-theme='dark'] .manager-rename button:hover:not(:disabled) {
+  border-color: #6d95ff;
+  background: #223653;
+  color: #dbe8ff;
+}
+
+.workspace[data-theme='dark'] .manager-action--danger:hover:not(:disabled) {
+  border-color: #6e3b49;
+  background: #38232b;
+  color: #ff9ca5;
+}
+
+.workspace[data-theme='dark'] .manager-rename__input:focus {
+  box-shadow: 0 0 0 3px rgba(109, 149, 255, .18);
+}
+
+.workspace[data-theme='dark'] .manager-empty__icon {
+  background: #22264c;
+  color: #a9a5ff;
+}
+
+.workspace[data-theme='dark'] .manager-empty__title {
+  color: #cbd8ea;
+}
+
+/* Settings status and helper controls. */
+.workspace[data-theme='dark'] .settings-card__icon {
+  background: #22264c;
+  color: #a9a5ff;
+}
+
+.workspace[data-theme='dark'] .settings-help {
+  border-color: #536783;
+  color: #a9b8ce;
+}
+
+.workspace[data-theme='dark'] .settings-state,
+.workspace[data-theme='dark'] .settings-state--ok,
+.workspace[data-theme='dark'] .settings-import-message--warn {
+  color: #98a6ba;
+}
+
+.workspace[data-theme='dark'] .settings-update-check {
+  background: #17352f;
+  color: #72ddb1;
+}
+
+.workspace[data-theme='dark'] .settings-update-status--warn {
+  color: #f2cc60;
+}
+
+.workspace[data-theme='dark'] .settings-update-status--warn .settings-update-check {
+  background: #332b1d;
+  color: #f2cc60;
+}
+
+/* The file manager library exposes several view-specific wrappers. These
+   broad rules keep cards and panels dark even when its internal class hash
+   changes between releases. */
+.workspace[data-theme='dark'] .ssh-files__browser .wx-sidebar,
+.workspace[data-theme='dark'] .ssh-files__browser .wx-wrapper,
+.workspace[data-theme='dark'] .ssh-files__browser .wx-tree,
+.workspace[data-theme='dark'] .ssh-files__browser .wx-content-wrapper,
+.workspace[data-theme='dark'] .ssh-files__browser .wx-content-item,
+.workspace[data-theme='dark'] .ssh-files__browser .wx-content-item-fit,
+.workspace[data-theme='dark'] .ssh-files__browser .wx-list,
+.workspace[data-theme='dark'] .ssh-files__browser .wx-table {
+  border-color: #2d3a4d !important;
+  background: #111923 !important;
+  color: #dce8f8 !important;
+}
+
+.workspace[data-theme='dark'] .ssh-files__browser .wx-folder,
+.workspace[data-theme='dark'] .ssh-files__browser .wx-row,
+.workspace[data-theme='dark'] .ssh-files__browser .wx-item,
+.workspace[data-theme='dark'] .ssh-files__browser .wx-button {
+  color: #c5d4e8 !important;
+}
+
+.workspace[data-theme='dark'] .ssh-files__browser .wx-folder:hover,
+.workspace[data-theme='dark'] .ssh-files__browser .wx-row:hover,
+.workspace[data-theme='dark'] .ssh-files__browser .wx-button:hover {
+  background: #1e2c40 !important;
+}
+
+.workspace[data-theme='dark'] .ssh-files__browser .wx-selected,
+.workspace[data-theme='dark'] .ssh-files__browser .wx-folder.wx-selected {
+  background: #223653 !important;
+  color: #dbe8ff !important;
+}
+
+.terminal__hint--inline {
+  margin: 0;
+  flex: 1;
+  min-width: 0;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Gemini icon size */
+.workspace .workspace__session-platform--gemini .workspace__session-platform-icon {
+  width: 16px !important;
+  height: 16px !important;
+}
+
+/* ChatGPT icon size */
+.workspace .workspace__session-platform--chatgpt .workspace__session-platform-icon {
+  width: 16px !important;
+  height: 16px !important;
+}
+
+/* DeepSeek icon slightly larger */
+.workspace .workspace__session-platform--deepseek .workspace__session-platform-icon {
+  width: 22px !important;
+  height: 22px !important;
+}
+
+/* 备用会话视图（切换对话视图）：深色模�?*/
+.workspace[data-theme='dark'] .stage__alternate-card {
+  background: #101620 !important;
+}
+
+.workspace[data-theme='dark'] .conversation-transcript {
+  background: #101620 !important;
+  color: #dce8f8 !important;
+  scrollbar-color: #3a4a61 transparent;
+}
+
+.workspace[data-theme='dark'] .conversation-transcript__empty {
+  color: #7f8da3 !important;
+}
+
+.workspace[data-theme='dark'] .conversation-message__avatar {
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: none;
+}
+
+.workspace[data-theme='dark'] .conversation-message--user .conversation-message__avatar {
+  background: #1c3350;
+  color: #8db8ea;
+}
+
+.workspace[data-theme='dark'] .conversation-message--assistant .conversation-message__avatar {
+  background: #2a2547;
+  color: #a99bdf;
+}
+
+.workspace[data-theme='dark'] .conversation-message__meta {
+  color: #8593a8;
+}
+
+.workspace[data-theme='dark'] .conversation-message__role {
+  color: #b3bfd1;
+}
+
+.workspace[data-theme='dark'] .conversation-message__time {
+  color: #74839a;
+}
+
+.workspace[data-theme='dark'] .conversation-message__body {
+  border-color: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+  color: #e2ebf8;
+}
+
+.workspace[data-theme='dark'] .conversation-message--user .conversation-message__body {
+  background: #17304d !important;
+}
+
+.workspace[data-theme='dark'] .conversation-message--assistant .conversation-message__body {
+  background: #182131 !important;
+}
+
+.workspace[data-theme='dark'] .conversation-message__body .wmde-markdown code:not(pre code) {
+  background: #22264c;
+  color: #b9c5ff;
+}
+
+/* ---------------- pure-black dark appearance ----------------
+ * Keep the existing blue accent and semantic status colours, but remove the
+ * blue cast from every neutral surface. This is the final pass so it wins over
+ * the earlier reference-theme refinements above.
+ */
+.workspace[data-theme='dark'] {
+  --bg: #000;
+  --bg-elevated: #080808;
+  --bg-chrome: #050505;
+  --border: #272727;
+  --text: #f2f2f2;
+  --text-muted: #a0a0a0;
+  background: #000 !important;
+  color: #f2f2f2 !important;
+}
+
+.workspace[data-theme='dark'] .workspace__nav,
+.workspace[data-theme='dark'] .workspace__transferbar,
+.workspace[data-theme='dark'] .workspace__content,
+.workspace[data-theme='dark'] .app,
+.workspace[data-theme='dark'] .topbar,
+.workspace[data-theme='dark'] .panel,
+.workspace[data-theme='dark'] .terminal-pane,
+.workspace[data-theme='dark'] .stage,
+.workspace[data-theme='dark'] .statusbar {
+  background: #000 !important;
+  border-color: #272727 !important;
+  color: #f2f2f2 !important;
+}
+
+.workspace[data-theme='dark'] .workspace__content,
+.workspace[data-theme='dark'] .stage,
+.workspace[data-theme='dark'] .manager-page {
+  background: #000 !important;
+}
+
+.workspace[data-theme='dark'] .workspace__sessions,
+.workspace[data-theme='dark'] .workspace__sessions::before,
+.workspace[data-theme='dark'] .workspace__brand,
+.workspace[data-theme='dark'] .workspace__nav-label,
+.workspace[data-theme='dark'] .terminal-controls,
+.workspace[data-theme='dark'] .terminal-pane__head,
+.workspace[data-theme='dark'] .terminal-pane__meta,
+.workspace[data-theme='dark'] .panel__head,
+.workspace[data-theme='dark'] .panel__collapse-head,
+.workspace[data-theme='dark'] .terminal-pane__input,
+.workspace[data-theme='dark'] .panel__list,
+.workspace[data-theme='dark'] .terminal-pane__output {
+  background: #080808 !important;
+  border-color: #272727 !important;
+}
+
+.workspace[data-theme='dark'] .workspace__session,
+.workspace[data-theme='dark'] .conversation-folder,
+.workspace[data-theme='dark'] .conversation,
+.workspace[data-theme='dark'] .current,
+.workspace[data-theme='dark'] .pending,
+.workspace[data-theme='dark'] .pending__item,
+.workspace[data-theme='dark'] .terminal,
+.workspace[data-theme='dark'] .ssh-list__item,
+.workspace[data-theme='dark'] .ssh-download,
+.workspace[data-theme='dark'] .transfer-item {
+  background: #0b0b0b !important;
+  border-color: #292929 !important;
+}
+
+.workspace[data-theme='dark'] .workspace__session:hover,
+.workspace[data-theme='dark'] .workspace__session--active,
+.workspace[data-theme='dark'] .conversation:hover,
+.workspace[data-theme='dark'] .conversation--active,
+.workspace[data-theme='dark'] .conversation-folder__head:hover,
+.workspace[data-theme='dark'] .ssh-list__item:hover,
+.workspace[data-theme='dark'] .ssh-list__item--active,
+.workspace[data-theme='dark'] .model-picker__option:hover {
+  background: #171717 !important;
+  border-color: #3a3a3a !important;
+}
+
+.workspace[data-theme='dark'] .conversation-folder__head,
+.workspace[data-theme='dark'] .current__head,
+.workspace[data-theme='dark'] .pending__item,
+.workspace[data-theme='dark'] .terminal__count,
+.workspace[data-theme='dark'] .badge,
+.workspace[data-theme='dark'] .mode,
+.workspace[data-theme='dark'] .mode__item,
+.workspace[data-theme='dark'] .panel__delay,
+.workspace[data-theme='dark'] .panel__sync {
+  background: #121212 !important;
+  border-color: #303030 !important;
+}
+
+.workspace[data-theme='dark'] .current__command,
+.workspace[data-theme='dark'] .terminal-pane__cwd,
+.workspace[data-theme='dark'] .terminal-pane__cwd-input,
+.workspace[data-theme='dark'] .terminal-pane__input .address__input,
+.workspace[data-theme='dark'] .address__input,
+.workspace[data-theme='dark'] .workspace__session-rename input,
+.workspace[data-theme='dark'] .settings-input,
+.workspace[data-theme='dark'] .settings-theme-select,
+.workspace[data-theme='dark'] .ssh-connect__input,
+.workspace[data-theme='dark'] .prompt-modal__search input {
+  background: #030303 !important;
+  border-color: #353535 !important;
+  color: #f2f2f2 !important;
+}
+
+.workspace[data-theme='dark'] .current__command,
+.workspace[data-theme='dark'] .terminal-pane__cwd:hover,
+.workspace[data-theme='dark'] .panel__sync--on,
+.workspace[data-theme='dark'] .mode__item--on,
+.workspace[data-theme='dark'] .mode__item--on:hover:not(:disabled) {
+  background: #1b1b1b !important;
+  border-color: #555 !important;
+}
+
+.workspace[data-theme='dark'] .workspace__new-session,
+.workspace[data-theme='dark'] .workspace__nav-collapse,
+.workspace[data-theme='dark'] .panel__collapse-button,
+.workspace[data-theme='dark'] .toolbar button,
+.workspace[data-theme='dark'] .settings-copy,
+.workspace[data-theme='dark'] .settings-modal__close,
+.workspace[data-theme='dark'] .transfer-modal__close,
+.workspace[data-theme='dark'] .ssh-connect__close,
+.workspace[data-theme='dark'] .ssh-files-modal__close {
+  background: #101010 !important;
+  border-color: #353535 !important;
+  color: #d6d6d6 !important;
+}
+
+.workspace[data-theme='dark'] .workspace__new-session:hover,
+.workspace[data-theme='dark'] .workspace__nav-collapse:hover,
+.workspace[data-theme='dark'] .panel__collapse-button:hover,
+.workspace[data-theme='dark'] .toolbar button:hover:not(:disabled),
+.workspace[data-theme='dark'] .settings-copy:hover:not(:disabled),
+.workspace[data-theme='dark'] .settings-modal__close:hover,
+.workspace[data-theme='dark'] .transfer-modal__close:hover,
+.workspace[data-theme='dark'] .ssh-connect__close:hover,
+.workspace[data-theme='dark'] .ssh-files-modal__close:hover {
+  background: #1c1c1c !important;
+  border-color: #5a5a5a !important;
+}
+
+.workspace[data-theme='dark'] .terminal__count,
+.workspace[data-theme='dark'] .terminal__count--time,
+.workspace[data-theme='dark'] .terminal__count--warn,
+.workspace[data-theme='dark'] .statusbar__id,
+.workspace[data-theme='dark'] .statusbar__mode,
+.workspace[data-theme='dark'] .statusbar__remote {
+  background: #151515 !important;
+  border-color: #3d3d3d !important;
+}
+
+.workspace[data-theme='dark'] .modal,
+.workspace[data-theme='dark'] .confirm-dialog,
+.workspace[data-theme='dark'] .new-session-modal,
+.workspace[data-theme='dark'] .modal--notes,
+.workspace[data-theme='dark'] .modal--prompt,
+.workspace[data-theme='dark'] .ssh-connect-overlay,
+.workspace[data-theme='dark'] .modal--ssh-files,
+.workspace[data-theme='dark'] .transfer-modal,
+.workspace[data-theme='dark'] .git-dialog {
+  background: rgba(0, 0, 0, .78) !important;
+}
+
+/* Only the sidebar question widget stays non-blocking over the native chat page. */
+.workspace[data-theme='dark'] .modal--question:not(.modal--question-centered) {
+  background: transparent !important;
+}
+
+.workspace[data-theme='dark'] .settings-modal,
+.workspace[data-theme='dark'] .new-session-modal__box,
+.workspace[data-theme='dark'] .transfer-modal__box,
+.workspace[data-theme='dark'] .ssh-connect-modal,
+.workspace[data-theme='dark'] .notes-modal,
+.workspace[data-theme='dark'] .prompt-modal,
+.workspace[data-theme='dark'] .confirm-dialog__box,
+.workspace[data-theme='dark'] .git-dialog__box,
+.workspace[data-theme='dark'] .ssh-files-modal {
+  background: #080808 !important;
+  border-color: #2d2d2d !important;
+  color: #f2f2f2 !important;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, .65) !important;
+}
+
+.workspace[data-theme='dark'] .settings-modal__head,
+.workspace[data-theme='dark'] .settings-modal__body,
+.workspace[data-theme='dark'] .settings-modal__foot,
+.workspace[data-theme='dark'] .settings-card,
+.workspace[data-theme='dark'] .new-session-modal__header,
+.workspace[data-theme='dark'] .new-session-modal__footer,
+.workspace[data-theme='dark'] .transfer-modal__head,
+.workspace[data-theme='dark'] .ssh-connect__head,
+.workspace[data-theme='dark'] .ssh-connect__sidebar,
+.workspace[data-theme='dark'] .ssh-connect__form,
+.workspace[data-theme='dark'] .ssh-connect__foot,
+.workspace[data-theme='dark'] .notes-modal__head,
+.workspace[data-theme='dark'] .notes-modal__editor-wrap,
+.workspace[data-theme='dark'] .notes-modal__foot,
+.workspace[data-theme='dark'] .prompt-modal__head,
+.workspace[data-theme='dark'] .prompt-modal__search,
+.workspace[data-theme='dark'] .ssh-files-modal__head,
+.workspace[data-theme='dark'] .confirm-dialog__foot {
+  background: #080808 !important;
+  border-color: #292929 !important;
+}
+
+.workspace[data-theme='dark'] .settings-card,
+.workspace[data-theme='dark'] .transfer-card,
+.workspace[data-theme='dark'] .manager-card,
+.workspace[data-theme='dark'] .manager-table__row,
+.workspace[data-theme='dark'] .manager-empty,
+.workspace[data-theme='dark'] .ssh-connect__advanced,
+.workspace[data-theme='dark'] .confirm-dialog__items {
+  background: #0b0b0b !important;
+  border-color: #292929 !important;
+}
+
+.workspace[data-theme='dark'] .new-session-modal__option,
+.workspace[data-theme='dark'] .new-session-modal__option--local,
+.workspace[data-theme='dark'] .settings-outline-btn,
+.workspace[data-theme='dark'] .settings-cancel-btn,
+.workspace[data-theme='dark'] .ssh-connect__new,
+.workspace[data-theme='dark'] .ssh-connect__cancel,
+.workspace[data-theme='dark'] .manager-action,
+.workspace[data-theme='dark'] .manager-rename button,
+.workspace[data-theme='dark'] .manager-rename__input,
+.workspace[data-theme='dark'] .notes-modal__preview-toggle,
+.workspace[data-theme='dark'] .notes-modal__button:not(.notes-modal__button--primary),
+.workspace[data-theme='dark'] .prompt-modal__action {
+  background: #101010 !important;
+  border-color: #3d3d3d !important;
+  color: #e0e0e0 !important;
+}
+
+.workspace[data-theme='dark'] .new-session-modal__option:hover,
+.workspace[data-theme='dark'] .new-session-modal__option--local:hover,
+.workspace[data-theme='dark'] .settings-outline-btn:hover:not(:disabled),
+.workspace[data-theme='dark'] .settings-cancel-btn:hover,
+.workspace[data-theme='dark'] .ssh-connect__new:hover,
+.workspace[data-theme='dark'] .ssh-connect__cancel:hover,
+.workspace[data-theme='dark'] .manager-action:hover:not(:disabled),
+.workspace[data-theme='dark'] .manager-rename button:hover:not(:disabled),
+.workspace[data-theme='dark'] .notes-modal__preview-toggle:hover,
+.workspace[data-theme='dark'] .notes-modal__preview-toggle--on,
+.workspace[data-theme='dark'] .notes-modal__button:hover:not(:disabled):not(.notes-modal__button--primary),
+.workspace[data-theme='dark'] .prompt-modal__action:hover,
+.workspace[data-theme='dark'] .prompt-modal__action--active {
+  background: #1c1c1c !important;
+  border-color: #5a5a5a !important;
+}
+
+.workspace[data-theme='dark'] .notes-modal .w-md-editor,
+.workspace[data-theme='dark'] .notes-modal .w-md-editor-toolbar,
+.workspace[data-theme='dark'] .notes-modal .w-md-editor-content,
+.workspace[data-theme='dark'] .notes-modal .w-md-editor-area,
+.workspace[data-theme='dark'] .notes-modal .w-md-editor-preview,
+.workspace[data-theme='dark'] .notes-modal .wmde-markdown,
+.workspace[data-theme='dark'] .prompt-modal__body,
+.workspace[data-theme='dark'] .prompt-modal__body .wmde-markdown,
+.workspace[data-theme='dark'] .prompt-modal__body .wmde-markdown pre {
+  background: #000 !important;
+  color: #e8e8e8 !important;
+}
+
+.workspace[data-theme='dark'] .ssh-files-modal,
+.workspace[data-theme='dark'] .ssh-files-modal__head,
+.workspace[data-theme='dark'] .ssh-files,
+.workspace[data-theme='dark'] .ssh-files__browser,
+.workspace[data-theme='dark'] .ssh-files__browser > *,
+.workspace[data-theme='dark'] .ssh-files__reference-table,
+.workspace[data-theme='dark'] .ssh-files__table-row,
+.workspace[data-theme='dark'] .ssh-files__crumbs {
+  background: #000 !important;
+}
+
+.workspace[data-theme='dark'] .ssh-files__table-head,
+.workspace[data-theme='dark'] .ssh-files__view-modes,
+.workspace[data-theme='dark'] .ssh-files__browser .wx-sidebar,
+.workspace[data-theme='dark'] .ssh-files__browser .wx-wrapper,
+.workspace[data-theme='dark'] .ssh-files__browser .wx-tree,
+.workspace[data-theme='dark'] .ssh-files__browser .wx-content-wrapper,
+.workspace[data-theme='dark'] .ssh-files__browser .wx-content-item,
+.workspace[data-theme='dark'] .ssh-files__browser .wx-content-item-fit,
+.workspace[data-theme='dark'] .ssh-files__browser .wx-list,
+.workspace[data-theme='dark'] .ssh-files__browser .wx-table,
+.workspace[data-theme='dark'] .ssh-files__browser .wx-filemanager,
+.workspace[data-theme='dark'] .ssh-files__browser .wx-toolbar,
+.workspace[data-theme='dark'] .ssh-files__browser .wx-row {
+  background: #080808 !important;
+  border-color: #292929 !important;
+}
+
+.workspace[data-theme='dark'] .ssh-files__table-row:hover,
+.workspace[data-theme='dark'] .ssh-files__view-modes button:hover,
+.workspace[data-theme='dark'] .ssh-files__sidebar-action:hover,
+.workspace[data-theme='dark'] .ssh-files__table-more:hover,
+.workspace[data-theme='dark'] .ssh-files__browser .wx-folder:hover,
+.workspace[data-theme='dark'] .ssh-files__browser .wx-row:hover {
+  background: #181818 !important;
+}
+
+.workspace[data-theme='dark'] .git-dialog--dark .git-dialog__box,
+.workspace[data-theme='dark'] .git-dialog--dark .gitfiles,
+.workspace[data-theme='dark'] .git-dialog--dark .gitdiff__body,
+.workspace[data-theme='dark'] .git-dialog--dark .gitdiff__line {
+  background: #000 !important;
+}
+
+.workspace[data-theme='dark'] .git-dialog--dark .git-dialog__head,
+.workspace[data-theme='dark'] .git-dialog--dark .gitlog__columns,
+.workspace[data-theme='dark'] .git-dialog--dark .gitfiles__pane,
+.workspace[data-theme='dark'] .git-dialog--dark .gitdiff__head,
+.workspace[data-theme='dark'] .git-dialog--dark .git-dialog__tabs,
+.workspace[data-theme='dark'] .git-dialog--dark .gitfiles__chip,
+.workspace[data-theme='dark'] .git-dialog--dark .gitdiff__modes {
+  background: #0a0a0a !important;
+  border-color: #292929 !important;
+}
+
+.workspace[data-theme='dark'] .git-dialog--dark .gitlog__row,
+.workspace[data-theme='dark'] .git-dialog--dark .gitfiles__row,
+.workspace[data-theme='dark'] .git-dialog--dark .gitdiff__hunk-head {
+  background: #0d0d0d !important;
+  border-color: #292929 !important;
+}
+
+.workspace[data-theme='dark'] .git-dialog--dark .gitlog__row:hover,
+.workspace[data-theme='dark'] .git-dialog--dark .gitfiles__row:hover,
+.workspace[data-theme='dark'] .git-dialog--dark .gitfiles__row--on,
+.workspace[data-theme='dark'] .git-dialog--dark .gitdiff__mode:hover {
+  background: #1a1a1a !important;
+}
+
+.workspace[data-theme='dark'] .manager-table__head {
+  background: #0a0a0a !important;
+  border-color: #292929 !important;
+}
+
+.workspace[data-theme='dark'] .manager-table__row:hover {
+  background: #181818 !important;
+}
+
+.workspace[data-theme='dark'] .settings-avatar-preview,
+.workspace[data-theme='dark'] .settings-avatar-button,
+.workspace[data-theme='dark'] .settings-avatar-preview-img--empty,
+.workspace[data-theme='dark'] .settings-update-check,
+.workspace[data-theme='dark'] .settings-card__icon,
+.workspace[data-theme='dark'] .transfer-modal__empty-icon,
+.workspace[data-theme='dark'] .manager-empty__icon,
+.workspace[data-theme='dark'] .new-session-modal__icon,
+.workspace[data-theme='dark'] .new-session-modal__option--ssh .new-session-modal__icon {
+  background: #151515 !important;
+}
+
+.workspace[data-theme='dark'] .conversation-message--user .conversation-message__body,
+.workspace[data-theme='dark'] .conversation-message--assistant .conversation-message__body {
+  background: #0c0c0c !important;
+}
+
+.workspace[data-theme='dark'] .terminal-entry {
+  border-bottom-color: #262626 !important;
+}
+
+.workspace[data-theme='dark'] .terminal-entry__body {
+  border-left-color: #2b2b2b !important;
+}
+
+.workspace[data-theme='dark'] .line--command {
+  background: #111 !important;
+  border-color: #343434 !important;
+  border-left-color: #6d95ff !important;
+  color: #c6d9ff !important;
+}
+
+.workspace[data-theme='dark'] .line--command::before {
+  color: #999 !important;
+}
+
+.workspace[data-theme='dark'] .line--output {
+  color: #d6d6d6 !important;
+}
+
+.workspace[data-theme='dark'] .line--notice {
+  background: #0d1d12 !important;
+  border-color: #24502e !important;
+  color: #86e2a0 !important;
+}
+
+.workspace[data-theme='dark'] .line--error {
+  background: #211013 !important;
+  border-color: #5a292d !important;
+  color: #ff9da7 !important;
+}
+
+/* The command editor must keep pasted newlines and grow with its draft. */
+.workspace:not(.workspace--manager) .terminal-pane__input .terminal-pane__command-input {
+  box-sizing: border-box;
+  height: auto;
+  min-height: 46px;
+  max-height: 240px;
+  padding: 10px 16px;
+  line-height: 1.6;
+  resize: none;
+  white-space: pre;
+  overflow: auto;
+}
+
+/* ---------------- MySQL connection page (full screen) ---------------- */
+
+.modal--mysql {
+  align-items: stretch;
+  justify-content: stretch;
+  padding: 0;
+  background: #fff;
+  backdrop-filter: none;
+}
+
+.mysql-page {
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background: #fff;
+}
+
+/*
+ * The head is one row: the add button, then the open-connection tabs.
+ *
+ * The tabs scroll sideways rather than wrapping, because a second row would push the
+ * form down every time another connection is opened, and the list can only get longer.
+ */
+.mysql-page__head {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  border-bottom: 1px solid #eef1f6;
+  background: #fff;
+}
+
+.mysql-page__add {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 34px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 9px;
+  background: linear-gradient(135deg, #00758f, #00a0b8);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 117, 143, .24);
+}
+
+.mysql-page__add:hover {
+  filter: brightness(1.06);
+}
+
+.mysql-page__add:active {
+  transform: translateY(1px);
+}
+
+.mysql-page__tabs {
+  flex: 1 1 auto;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.mysql-page__tabs-empty {
+  padding-left: 6px;
+  font-size: 12px;
+  color: #98a2b3;
+}
+
+.mysql-page__tab {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  max-width: 220px;
+  height: 34px;
+  border-radius: 9px;
+  background: #f1f3f8;
+  color: #55617a;
+  transition: background .15s, color .15s;
+}
+
+.mysql-page__tab:hover {
+  background: #e8ebf3;
+}
+
+.mysql-page__tab--active {
+  background: #e3f5f9;
+  color: #0b7c92;
+  box-shadow: inset 0 0 0 1px rgba(0, 160, 184, .35);
+}
+
+.mysql-page__tab-label {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 0 4px 0 12px;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font-size: 12.5px;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+}
+
+.mysql-page__tab-close {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  margin-right: 5px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: inherit;
+  opacity: .55;
+  cursor: pointer;
+}
+
+.mysql-page__tab-close:hover {
+  background: rgba(15, 23, 42, .09);
+  opacity: 1;
+}
+
+.mysql-page__badge {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 11px;
+  border-radius: 999px;
+  background: #f1f3f8;
+  font-size: 12px;
+  color: #8a93a6;
+}
+
+.mysql-page__badge i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #c3cad8;
+}
+
+.mysql-page__badge--ok {
+  background: #e9f8f0;
+  color: #1f9d63;
+}
+
+.mysql-page__badge--ok i {
+  background: #22b573;
+}
+
+.mysql-page__close {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: #6b7688;
+  cursor: pointer;
+}
+
+.mysql-page__close:hover {
+  background: #f1f3f8;
+  color: #1f2733;
+}
+
+/* Body is two panes: the saved list, and the page the active tab is showing. */
+.mysql-page__body {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  align-items: stretch;
+  background: #f6f8fb;
+}
+
+.mysql-page__sidebar {
+  flex: none;
+  width: 264px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid #e6e9f0;
+  background: #fff;
+  overflow-y: auto;
+}
+
+.mysql-page__sidebar-head {
+  position: sticky;
+  top: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 16px 10px;
+  background: #fff;
+}
+
+.mysql-page__sidebar-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: #55617a;
+}
+
+.mysql-page__sidebar-count {
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: #f1f3f8;
+  font-size: 11px;
+  color: #8a93a6;
+}
+
+.mysql-page__sidebar-hint {
+  padding: 0 16px 12px;
+}
+
+.mysql-page__sidebar-list {
+  list-style: none;
+  margin: 0;
+  padding: 0 8px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.mysql-page__item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  border-radius: 9px;
+}
+
+.mysql-page__item:hover {
+  background: #f4f6fa;
+}
+
+.mysql-page__item--active {
+  background: #e9f6fa;
+}
+
+.mysql-page__item-main {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px 10px;
+  border: 0;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+}
+
+.mysql-page__item-name {
+  font-size: 13px;
+  color: #1f2733;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mysql-page__item--active .mysql-page__item-name {
+  color: #0b7c92;
+  font-weight: 600;
+}
+
+.mysql-page__item-target {
+  font-size: 11.5px;
+  color: #8a93a6;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Copy is revealed on hover next to delete, for the same reason delete is. */
+.mysql-page__item-copy {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: #a3abbd;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.mysql-page__item:hover .mysql-page__item-copy {
+  opacity: 1;
+}
+
+.mysql-page__item-copy:hover {
+  background: #e9f6fa;
+  color: #0b7c92;
+}
+
+.mysql-page__item-copy--done {
+  background: #e9f8f0;
+  color: #1f9d63;
+  opacity: 1;
+}
+/* Revealed on hover so the row reads as a name, not as a name with a delete button. */
+.mysql-page__item-remove {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  margin-right: 6px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: #a3abbd;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.mysql-page__item:hover .mysql-page__item-remove {
+  opacity: 1;
+}
+
+.mysql-page__item-remove:hover {
+  background: #fdeaea;
+  color: #c0392b;
+}
+
+.mysql-page__detail {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow-y: auto;
+  padding: 24px 22px 32px;
+}
+
+.mysql-page__empty {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  color: #8a93a6;
+}
+
+.mysql-page__empty-mark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.mysql-page__empty-title {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #55617a;
+}
+
+.mysql-page__empty-sub {
+  margin: 0;
+  max-width: 320px;
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: #98a2b3;
+  text-align: center;
+}
+
+.mysql-page__card {
+  width: min(760px, 100%);
+  margin: 0 auto;
+  padding: 22px 24px 24px;
+  border: 1px solid #e6e9f0;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, .07);
+}
+
+.mysql-page__card-head {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.mysql-page__card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1f2733;
+}
+
+.mysql-page__card-note {
+  font-size: 12px;
+  color: #8a93a6;
+}
+
+.mysql-page__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px 18px;
+}
+
+.mysql-page__field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  min-width: 0;
+}
+
+.mysql-page__field--host {
+  grid-column: span 1;
+}
+
+.mysql-page__field--port {
+  grid-column: span 1;
+  max-width: 180px;
+}
+
+.mysql-page__field--wide {
+  grid-column: 1 / -1;
+}
+
+.mysql-page__label {
+  font-size: 12px;
+  font-weight: 500;
+  color: #55617a;
+}
+.mysql-page__label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* The database field: the input, a 查看数据库 button, and the list it opens. */
+.mysql-page__db {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.mysql-page__db .mysql-page__input {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.mysql-page__db-btn {
+  flex: none;
+  height: 38px;
+  padding: 0 14px;
+  border: 1px solid #d8dde8;
+  border-radius: 9px;
+  background: #fff;
+  font-size: 12.5px;
+  color: #3c4657;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background .15s, border-color .15s, color .15s;
+}
+
+.mysql-page__db-btn:hover {
+  border-color: #00a0b8;
+  color: #0b7c92;
+}
+
+.mysql-page__db-btn--on {
+  border-color: #00a0b8;
+  background: #e9f6fa;
+  color: #0b7c92;
+}
+
+.mysql-page__db-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  z-index: 20;
+  width: min(420px, 100%);
+  max-height: 300px;
+  overflow-y: auto;
+  padding: 6px;
+  border: 1px solid #e2e7f0;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 16px 40px rgba(15, 23, 42, .16);
+}
+
+.mysql-page__db-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 8px 8px;
+  font-size: 11.5px;
+  color: #8a93a6;
+}
+
+.mysql-page__db-refresh {
+  padding: 3px 9px;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  font-size: 11.5px;
+  color: #0b7c92;
+  cursor: pointer;
+}
+
+.mysql-page__db-refresh:hover {
+  background: #e9f6fa;
+}
+
+.mysql-page__db-note {
+  margin: 0;
+  padding: 10px;
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: #6b7688;
+}
+
+.mysql-page__db-note--error {
+  color: #c0392b;
+}
+
+.mysql-page__db-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.mysql-page__db-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 8px 10px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  font-size: 13px;
+  color: #1f2733;
+  text-align: left;
+  cursor: pointer;
+}
+
+.mysql-page__db-item:hover {
+  background: #f2f6fb;
+}
+
+.mysql-page__db-item--active {
+  background: #e9f6fa;
+  color: #0b7c92;
+  font-weight: 600;
+}
+
+.mysql-page__db-icon {
+  flex: none;
+  display: flex;
+  align-items: center;
+  color: #7f8da4;
+}
+
+.mysql-page__db-item--active .mysql-page__db-icon {
+  color: #0b7c92;
+}
+
+.mysql-page__db-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+/* Marks a field the form refuses to save without; the save button stays disabled too. */
+.mysql-page__required {
+  padding: 1px 6px;
+  border-radius: 999px;
+  background: #fdeaea;
+  font-size: 10.5px;
+  font-weight: 600;
+  color: #c0392b;
+}
+.mysql-page__input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 12px;
+  border: 1px solid #d8dde8;
+  border-radius: 9px;
+  background: #fff;
+  font-size: 13px;
+  color: #1f2733;
+  outline: none;
+  transition: border-color .15s, box-shadow .15s;
+}
+
+.mysql-page__input:focus {
+  border-color: #00a0b8;
+  box-shadow: 0 0 0 3px rgba(0, 160, 184, .14);
+}
+
+.mysql-page__password {
+  position: relative;
+  display: block;
+}
+
+.mysql-page__password .mysql-page__input {
+  padding-right: 62px;
+}
+
+.mysql-page__reveal {
+  position: absolute;
+  top: 50%;
+  right: 6px;
+  transform: translateY(-50%);
+  padding: 5px 9px;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  font-size: 12px;
+  color: #6b7688;
+  cursor: pointer;
+}
+
+.mysql-page__reveal:hover {
+  background: #f1f3f8;
+  color: #1f2733;
+}
+
+.mysql-page__hint {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.6;
+  color: #6b7688;
+}
+
+.mysql-page__hint--note {
+  padding: 9px 12px;
+  border-radius: 9px;
+  background: #f5f8fb;
+}
+
+.mysql-page__hint--error {
+  color: #c0392b;
+}
+
+/*
+ * The actions that belong to ONE open connection: save, or close just this page.
+ *
+ * They sit inside the card rather than in a bar across the whole dialog, because they act
+ * on the page on screen — a bar at the bottom reads as if it saved everything, and with
+ * several tabs open that is the wrong thing to believe.
+ */
+/* The tables inside a connection, listed under its form. */
+.mysql-page__tables {
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid #eef1f6;
+}
+
+.mysql-page__tables-head {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.mysql-page__tables-summary {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.mysql-page__tables-actions {
+  display: flex;
+  align-items: center;
+  flex: 1 1 280px;
+  min-width: 0;
+  max-width: 380px;
+  margin-left: auto;
+  gap: 8px;
+}
+
+.mysql-page__input.mysql-page__table-search {
+  flex: 1;
+  min-width: 0;
+  width: 0;
+}
+
+.mysql-page__tables-actions .mysql-page__btn {
+  flex: none;
+  white-space: nowrap;
+}
+
+.mysql-page__table-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  max-height: 320px;
+  overflow-y: auto;
+}
+
+.mysql-page__table-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.mysql-page__table-row .mysql-page__table-item {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.mysql-page__table-row .mysql-page__table-name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mysql-page__btn.mysql-page__table-ddl {
+  flex: none;
+  min-height: 36px;
+  padding: 6px 10px;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.mysql-page__table-item:focus-visible,
+.mysql-page__table-ddl:focus-visible {
+  outline: 2px solid #0086a1;
+  outline-offset: -2px;
+}
+
+.mysql-page__table-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 8px 10px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+}
+
+.mysql-page__table-item:hover {
+  background: #f2f6fb;
+}
+
+.mysql-page__table-item,
+.mysql-page__table-item .mysql-page__table-name,
+.mysql-page__table-item .mysql-page__table-comment {
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+.mysql-page__table-item .mysql-page__table-name,
+.mysql-page__table-item .mysql-page__table-comment {
+  cursor: text;
+}
+
+.mysql-page__table-name {
+  font-size: 13px;
+  color: #1f2733;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+.mysql-page__table-type {
+  flex: none;
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: #eef2f7;
+  font-size: 10.5px;
+  color: #6b7688;
+}
+
+.mysql-page__table-type--view {
+  background: #f0ecfb;
+  color: #6b4fc4;
+}
+
+.mysql-page__table-comment {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-size: 11.5px;
+  color: #98a2b3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* The table viewer: one page of rows in its own tab. */
+.mysql-page__table {
+  padding: 4px 2px 8px;
+}
+
+.mysql-page__ddl-head {
+  flex-wrap: wrap;
+}
+
+.mysql-page__ddl-head .mysql-page__card-title,
+.mysql-page__ddl-head .mysql-page__card-note {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+
+.mysql-page__table-scroll {
+  margin-top: 12px;
+  overflow: auto;
+  max-height: calc(100vh - 260px);
+  border: 1px solid #e6e9f0;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.mysql-page__grid-table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 12.5px;
+}
+
+.mysql-page__grid-table th,
+.mysql-page__grid-table td {
+  padding: 7px 12px;
+  border-bottom: 1px solid #eef1f6;
+  text-align: left;
+  white-space: nowrap;
+  max-width: 320px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mysql-page__grid-table th {
+  position: sticky;
+  top: 0;
+  background: #f6f8fb;
+  font-weight: 600;
+  color: #55617a;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+.mysql-page__grid-table tbody tr:hover {
+  background: #fafbfd;
+}
+
+.mysql-page__grid-table td {
+  color: #1f2733;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+.mysql-page__null {
+  color: #a3abbd;
+  font-style: italic;
+}
+
+.mysql-page__table-note {
+  margin-top: 10px;
+}
+.mysql-page__card-foot {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid #eef1f6;
+}
+
+.mysql-page__card-foot-hint {
+  font-size: 12px;
+  color: #8a93a6;
+}
+.mysql-page__btn {
+  padding: 8px 16px;
+  border: 1px solid #d8dde8;
+  border-radius: 9px;
+  background: #fff;
+  font-size: 13px;
+  color: #3c4657;
+  cursor: pointer;
+}
+
+.mysql-page__btn:hover:not(:disabled):not(.mysql-page__btn--primary) {
+  background: #f4f6fa;
+}
+
+.mysql-page__btn--primary {
+  border-color: transparent;
+  background: linear-gradient(135deg, #00758f, #00a0b8);
+  color: #fff;
+  font-weight: 600;
+}
+
+.mysql-page__btn--primary:hover:not(:disabled) {
+  background: linear-gradient(135deg, #00758f, #00a0b8);
+  color: #fff;
+  filter: brightness(1.06);
+}
+
+.mysql-page__btn:disabled {
+  opacity: .5;
+  cursor: default;
+  filter: none;
+}
+.workspace[data-theme='dark'] .modal--mysql {
+  background: #0a0f16;
+}
+
+.workspace[data-theme='dark'] .mysql-page {
+  background: #0a0f16;
+}
+
+.workspace[data-theme='dark'] .mysql-page__head {
+  border-bottom-color: #1d2531;
+  background: #10151d;
+}
+
+.workspace[data-theme='dark'] .mysql-page__tabs-empty {
+  color: #5f6b7f;
+}
+
+.workspace[data-theme='dark'] .mysql-page__tab {
+  background: #161d28;
+  color: #93a0b6;
+}
+
+.workspace[data-theme='dark'] .mysql-page__tab:hover {
+  background: #1c2739;
+}
+
+.workspace[data-theme='dark'] .mysql-page__tab--active {
+  background: #0f2a33;
+  color: #4fd1e8;
+  box-shadow: inset 0 0 0 1px rgba(0, 160, 184, .45);
+}
+
+.workspace[data-theme='dark'] .mysql-page__tab-close:hover {
+  background: rgba(255, 255, 255, .1);
+}
+
+.workspace[data-theme='dark'] .mysql-page__badge {
+  background: #161d28;
+  color: #7d8aa0;
+}
+
+.workspace[data-theme='dark'] .mysql-page__badge--ok {
+  background: #12291f;
+  color: #4ecf95;
+}
+
+.workspace[data-theme='dark'] .mysql-page__close {
+  color: #93a0b6;
+}
+
+.workspace[data-theme='dark'] .mysql-page__close:hover {
+  background: #1a2230;
+  color: #eef2f9;
+}
+
+.workspace[data-theme='dark'] .mysql-page__body {
+  background: #0a0f16;
+}
+
+.workspace[data-theme='dark'] .mysql-page__sidebar {
+  border-right-color: #1d2531;
+  background: #10151d;
+}
+
+.workspace[data-theme='dark'] .mysql-page__sidebar-head {
+  background: #10151d;
+}
+
+.workspace[data-theme='dark'] .mysql-page__sidebar-title {
+  color: #93a0b6;
+}
+
+.workspace[data-theme='dark'] .mysql-page__sidebar-count {
+  background: #1a2230;
+  color: #7d8aa0;
+}
+
+.workspace[data-theme='dark'] .mysql-page__item:hover {
+  background: #161d28;
+}
+
+.workspace[data-theme='dark'] .mysql-page__item--active {
+  background: #10222b;
+}
+
+.workspace[data-theme='dark'] .mysql-page__item-name {
+  color: #e6ecf6;
+}
+
+.workspace[data-theme='dark'] .mysql-page__item--active .mysql-page__item-name {
+  color: #4fd1e8;
+}
+
+.workspace[data-theme='dark'] .mysql-page__item-target {
+  color: #7d8aa0;
+}
+
+.workspace[data-theme='dark'] .mysql-page__item-copy {
+  color: #5f6b7f;
+}
+
+.workspace[data-theme='dark'] .mysql-page__item-copy:hover {
+  background: #0f2a33;
+  color: #4fd1e8;
+}
+
+.workspace[data-theme='dark'] .mysql-page__item-copy--done {
+  background: #12291f;
+  color: #4ecf95;
+}
+.workspace[data-theme='dark'] .mysql-page__item-remove {
+  color: #5f6b7f;
+}
+
+.workspace[data-theme='dark'] .mysql-page__item-remove:hover {
+  background: #3a1e1e;
+  color: #ff8a7a;
+}
+
+.workspace[data-theme='dark'] .mysql-page__empty-mark {
+  color: #7d8aa0;
+}
+
+.workspace[data-theme='dark'] .mysql-page__empty-title {
+  color: #93a0b6;
+}
+
+.workspace[data-theme='dark'] .mysql-page__empty-sub {
+  color: #5f6b7f;
+}
+
+.workspace[data-theme='dark'] .mysql-page__card {
+  border-color: #232b38;
+  background: #10151d;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, .4);
+}
+
+.workspace[data-theme='dark'] .mysql-page__card-title {
+  color: #eef2f9;
+}
+
+.workspace[data-theme='dark'] .mysql-page__card-note,
+.workspace[data-theme='dark'] .mysql-page__label {
+  color: #93a0b6;
+}
+
+.workspace[data-theme='dark'] .mysql-page__input {
+  border-color: #2a3444;
+  background: #0c1119;
+  color: #e6ecf6;
+}
+
+.workspace[data-theme='dark'] .mysql-page__input:focus {
+  border-color: #00a0b8;
+  box-shadow: 0 0 0 3px rgba(0, 160, 184, .22);
+}
+
+.workspace[data-theme='dark'] .mysql-page__reveal:hover {
+  background: #1a2230;
+  color: #eef2f9;
+}
+
+.workspace[data-theme='dark'] .mysql-page__hint {
+  color: #93a0b6;
+}
+
+.workspace[data-theme='dark'] .mysql-page__hint--note {
+  background: #161d28;
+}
+
+.workspace[data-theme='dark'] .mysql-page__hint--error {
+  color: #ff8a7a;
+}
+.workspace[data-theme='dark'] .mysql-page__db-btn {
+  border-color: #2a3444;
+  background: #161d28;
+  color: #cbd6e6;
+}
+
+.workspace[data-theme='dark'] .mysql-page__db-btn:hover {
+  border-color: #00a0b8;
+  color: #4fd1e8;
+}
+
+.workspace[data-theme='dark'] .mysql-page__db-btn--on {
+  border-color: #00a0b8;
+  background: #0f2a33;
+  color: #4fd1e8;
+}
+
+.workspace[data-theme='dark'] .mysql-page__db-menu {
+  border-color: #232b38;
+  background: #10151d;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, .5);
+}
+
+.workspace[data-theme='dark'] .mysql-page__db-head {
+  color: #7d8aa0;
+}
+
+.workspace[data-theme='dark'] .mysql-page__db-refresh {
+  color: #4fd1e8;
+}
+
+.workspace[data-theme='dark'] .mysql-page__db-refresh:hover {
+  background: #0f2a33;
+}
+
+.workspace[data-theme='dark'] .mysql-page__db-note {
+  color: #93a0b6;
+}
+
+.workspace[data-theme='dark'] .mysql-page__db-note--error {
+  color: #ff8a7a;
+}
+
+.workspace[data-theme='dark'] .mysql-page__db-item {
+  color: #e6ecf6;
+}
+
+.workspace[data-theme='dark'] .mysql-page__db-item:hover {
+  background: #161d28;
+}
+
+.workspace[data-theme='dark'] .mysql-page__db-item--active {
+  background: #10222b;
+  color: #4fd1e8;
+}
+
+.workspace[data-theme='dark'] .mysql-page__db-icon {
+  color: #7d8aa0;
+}
+
+.workspace[data-theme='dark'] .mysql-page__db-item--active .mysql-page__db-icon {
+  color: #4fd1e8;
+}
+.workspace[data-theme='dark'] .mysql-page__required {
+  background: #3a1e1e;
+  color: #ff8a7a;
+}
+.workspace[data-theme='dark'] .mysql-page__tables {
+  border-top-color: #1d2531;
+}
+
+.workspace[data-theme='dark'] .mysql-page__table-item:hover {
+  background: #161d28;
+}
+
+.workspace[data-theme='dark'] .mysql-page__table-name {
+  color: #e6ecf6;
+}
+
+.workspace[data-theme='dark'] .mysql-page__table-type {
+  background: #1a2230;
+  color: #93a0b6;
+}
+
+.workspace[data-theme='dark'] .mysql-page__table-type--view {
+  background: #241f3a;
+  color: #b8a3f0;
+}
+
+.workspace[data-theme='dark'] .mysql-page__table-comment {
+  color: #5f6b7f;
+}
+
+
+.workspace[data-theme='dark'] .mysql-page__table-scroll {
+  border-color: #232b38;
+  background: #10151d;
+}
+
+.workspace[data-theme='dark'] .mysql-page__grid-table th {
+  background: #161d28;
+  color: #93a0b6;
+}
+
+.workspace[data-theme='dark'] .mysql-page__grid-table th,
+.workspace[data-theme='dark'] .mysql-page__grid-table td {
+  border-bottom-color: #1d2531;
+}
+
+.workspace[data-theme='dark'] .mysql-page__grid-table tbody tr:hover {
+  background: #141b25;
+}
+
+.workspace[data-theme='dark'] .mysql-page__grid-table td {
+  color: #e6ecf6;
+}
+
+.workspace[data-theme='dark'] .mysql-page__null {
+  color: #5f6b7f;
+}
+
+.workspace[data-theme='dark'] .mysql-page__tab-icon {
+  color: #4fd1e8;
+}
+.workspace[data-theme='dark'] .mysql-page__card-foot {
+  border-top-color: #1d2531;
+}
+
+.workspace[data-theme='dark'] .mysql-page__card-foot-hint {
+  color: #7d8aa0;
+}
+.workspace[data-theme='dark'] .mysql-page__btn {
+  border-color: #2a3444;
+  background: #161d28;
+  color: #cbd6e6;
+}
+
+.workspace[data-theme='dark'] .mysql-page__btn:hover:not(:disabled):not(.mysql-page__btn--primary) {
+  background: #1c2739;
+}
+
+.workspace[data-theme='dark'] .mysql-page__btn--primary {
+  border-color: transparent;
+  background: linear-gradient(135deg, #00758f, #00a0b8);
+  color: #fff;
+}
+/* Keep the primary (save) button legible while hovering and in dark mode. */
+.workspace[data-theme='dark'] .notes-modal__button--primary {
+  border-color: #5061f4;
+  background: linear-gradient(135deg, #6270ff, #4d59ec);
+  color: #fff;
+  box-shadow: 0 6px 16px rgba(77, 89, 236, .28);
+}
+
+.workspace[data-theme='dark'] .notes-modal__button--primary:hover:not(:disabled) {
+  border-color: #4a58e6;
+  background: linear-gradient(135deg, #5563ff, #3f4bd8);
+  color: #fff;
+}
+
+/* ---------------- Nacos 连接 ---------------- */
+
+.modal--nacos {
+  align-items: stretch;
+  justify-content: stretch;
+  padding: 0;
+  background: #fff;
+  backdrop-filter: none;
+}
+
+.nacos-page {
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background: #fff;
+}
+
+.nacos-page__head {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 18px;
+  border-bottom: 1px solid #eef1f6;
+  background: #fff;
+}
+
+.nacos-page__mark {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+}
+
+.nacos-page__titles {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.nacos-page__title {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: #16202f;
+}
+
+.nacos-page__sub {
+  margin: 0;
+  font-size: 12.5px;
+  color: #7d8aa0;
+}
+
+.nacos-page__close {
+  flex: none;
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  color: #6b7789;
+  cursor: pointer;
+  transition: background .15s, color .15s;
+}
+
+.nacos-page__close:hover {
+  background: #f1f3f8;
+  color: #16202f;
+}
+
+.nacos-page__body {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px;
+  background: #f7f9fc;
+}
+
+.nacos-page__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  text-align: center;
+}
+
+.nacos-page__empty-mark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 4px;
+}
+
+.nacos-page__empty-title {
+  margin: 4px 0 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: #35405a;
+}
+
+.nacos-page__empty-sub {
+  margin: 0;
+  font-size: 13px;
+  color: #98a2b3;
+}
+
+/* ---------------- dark ---------------- */
+
+.workspace[data-theme='dark'] .nacos-page,
+.workspace[data-theme='dark'] .nacos-page__head {
+  background: #0f151f;
+}
+
+.workspace[data-theme='dark'] .nacos-page__head {
+  border-bottom-color: #1a2230;
+}
+
+.workspace[data-theme='dark'] .nacos-page__mark {
+  background: none;
+}
+
+.workspace[data-theme='dark'] .nacos-page__title {
+  color: #eef2f9;
+}
+
+.workspace[data-theme='dark'] .nacos-page__sub {
+  color: #7d8aa0;
+}
+
+.workspace[data-theme='dark'] .nacos-page__close {
+  color: #93a0b6;
+}
+
+.workspace[data-theme='dark'] .nacos-page__close:hover {
+  background: #1a2230;
+  color: #eef2f9;
+}
+
+.workspace[data-theme='dark'] .nacos-page__body {
+  background: #0a0f16;
+}
+
+.workspace[data-theme='dark'] .nacos-page__empty-mark {
+  color: #4d8bff;
+}
+
+.workspace[data-theme='dark'] .nacos-page__empty-title {
+  color: #93a0b6;
+}
+
+.workspace[data-theme='dark'] .nacos-page__empty-sub {
+  color: #5f6b7f;
+}
+/* ---------------- Nacos console: toolbar, address bar, native slot ---------------- */
+
+.nacos-page__disconnect {
+  flex: none;
+  height: 32px;
+  margin-left: auto;
+  padding: 0 14px;
+  border: 1px solid #e3e8f0;
+  border-radius: 9px;
+  background: #fff;
+  color: #55617a;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .15s, color .15s, border-color .15s;
+}
+
+.nacos-page__disconnect:hover {
+  border-color: #cfd8e5;
+  background: #f4f6fa;
+  color: #16202f;
+}
+
+.nacos-page__toolbar {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-bottom: 1px solid #eef1f6;
+  background: #fff;
+}
+
+.nacos-page__nav {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: #55617a;
+  cursor: pointer;
+  transition: background .15s, color .15s;
+}
+
+.nacos-page__nav:hover:not(:disabled) {
+  background: #f1f3f8;
+  color: #16202f;
+}
+
+.nacos-page__nav:disabled {
+  color: #c3cbd8;
+  cursor: default;
+}
+
+.nacos-page__address {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.nacos-page__address-input {
+  width: 100%;
+  height: 30px;
+  padding: 0 12px;
+  border: 1px solid #e3e8f0;
+  border-radius: 8px;
+  background: #f7f9fc;
+  color: #35405a;
+  font-size: 12.5px;
+  outline: none;
+  transition: border-color .15s, background .15s;
+}
+
+.nacos-page__address-input:focus {
+  border-color: #b9cdfa;
+  background: #fff;
+}
+
+/* A determinate-looking bar is wrong here: load progress is not known, only its existence. */
+.nacos-page__progress {
+  flex: none;
+  height: 2px;
+  background: linear-gradient(90deg, #4090ff, #1be1f7);
+  animation: nacos-progress 1.1s ease-in-out infinite;
+}
+
+@keyframes nacos-progress {
+  0% { opacity: .25; }
+  50% { opacity: 1; }
+  100% { opacity: .25; }
+}
+
+.nacos-page__error {
+  flex: none;
+  margin: 0;
+  padding: 9px 16px;
+  background: #fff5f4;
+  color: #c0392b;
+  font-size: 12.5px;
+}
+
+/* The native view is positioned over this box, so it only reserves the room. */
+.nacos-page__slot {
+  flex: 1 1 auto;
+  min-height: 0;
+  background: #fff;
+}
+
+/* ---------------- Nacos console: the connect form ---------------- */
+
+.nacos-page__connect {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: min(560px, 100%);
+  padding: 0 24px;
+  text-align: center;
+}
+
+.nacos-page__connect-mark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 14px;
+}
+
+.nacos-page__connect-title {
+  margin: 0 0 6px;
+  font-size: 17px;
+  font-weight: 700;
+  color: #35405a;
+}
+
+.nacos-page__connect-sub {
+  margin: 0 0 20px;
+  font-size: 13px;
+  color: #8b96a8;
+}
+
+.nacos-page__connect-row {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+}
+
+.nacos-page__connect-input {
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 40px;
+  padding: 0 14px;
+  border: 1px solid #e3e8f0;
+  border-radius: 10px;
+  background: #fff;
+  color: #16202f;
+  font-size: 13px;
+  outline: none;
+  transition: border-color .15s, box-shadow .15s;
+}
+
+.nacos-page__connect-input:focus {
+  border-color: #8fb6ff;
+  box-shadow: 0 0 0 3px rgba(64, 144, 255, .14);
+}
+
+.nacos-page__connect-btn {
+  flex: none;
+  height: 40px;
+  padding: 0 20px;
+  border: 0;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #4090ff, #1be1f7);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 6px 16px rgba(64, 144, 255, .26);
+  transition: filter .15s, transform .1s;
+}
+
+.nacos-page__connect-btn:hover:not(:disabled) {
+  filter: brightness(1.06);
+}
+
+.nacos-page__connect-btn:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.nacos-page__connect-btn:disabled {
+  opacity: .55;
+  cursor: default;
+  box-shadow: none;
+}
+
+.nacos-page__connect-hint {
+  margin: 12px 0 0;
+  font-size: 12px;
+  color: #a3adbd;
+}
+
+.nacos-page__connect-error {
+  margin: 14px 0 0;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: #fff5f4;
+  color: #c0392b;
+  font-size: 12.5px;
+}
+
+/* ---------------- dark ---------------- */
+
+.workspace[data-theme='dark'] .nacos-page__toolbar,
+.workspace[data-theme='dark'] .nacos-page__disconnect {
+  background: #0f151f;
+  border-color: #1a2230;
+}
+
+.workspace[data-theme='dark'] .nacos-page__disconnect {
+  color: #93a0b6;
+}
+
+.workspace[data-theme='dark'] .nacos-page__disconnect:hover {
+  background: #1a2230;
+  color: #eef2f9;
+}
+
+.workspace[data-theme='dark'] .nacos-page__nav {
+  color: #93a0b6;
+}
+
+.workspace[data-theme='dark'] .nacos-page__nav:hover:not(:disabled) {
+  background: #1a2230;
+  color: #eef2f9;
+}
+
+.workspace[data-theme='dark'] .nacos-page__address-input {
+  border-color: #1f2a3a;
+  background: #131a25;
+  color: #cbd6e6;
+}
+
+.workspace[data-theme='dark'] .nacos-page__address-input:focus {
+  border-color: #33507f;
+  background: #0f151f;
+}
+
+.workspace[data-theme='dark'] .nacos-page__error {
+  background: #2a1a1a;
+  color: #ff8a7a;
+}
+
+.workspace[data-theme='dark'] .nacos-page__slot {
+  background: #0a0f16;
+}
+
+.workspace[data-theme='dark'] .nacos-page__connect-title {
+  color: #eef2f9;
+}
+
+.workspace[data-theme='dark'] .nacos-page__connect-sub {
+  color: #7d8aa0;
+}
+
+.workspace[data-theme='dark'] .nacos-page__connect-input {
+  border-color: #1f2a3a;
+  background: #131a25;
+  color: #eef2f9;
+}
+
+.workspace[data-theme='dark'] .nacos-page__connect-hint {
+  color: #5f6b7f;
+}
+
+.workspace[data-theme='dark'] .nacos-page__connect-error {
+  background: #2a1a1a;
+  color: #ff8a7a;
+}
+/* ---------------- Nacos: sidebar, tabs, form, live console ---------------- */
+
+.nacos-page__body {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  align-items: stretch;
+  justify-content: flex-start;
+  padding: 0;
+  background: #f7f9fc;
+}
+
+.nacos-page__sidebar {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  width: 260px;
+  min-height: 0;
+  padding: 14px 12px;
+  border-right: 1px solid #eef1f6;
+  background: #fff;
+}
+
+.nacos-page__sidebar-head {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 6px 10px;
+}
+
+.nacos-page__sidebar-title {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .04em;
+  color: #8b96a8;
+}
+
+.nacos-page__sidebar-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 18px;
+  padding: 0 6px;
+  border-radius: 9px;
+  background: #eef2f7;
+  color: #7f8da4;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.nacos-page__sidebar-list {
+  flex: 1 1 auto;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  overflow-y: auto;
+}
+
+.nacos-page__sidebar-list li {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  border-radius: 10px;
+}
+
+.nacos-page__item {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  padding: 9px 30px 9px 10px;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+  transition: background .15s;
+}
+
+.nacos-page__item:hover {
+  background: #f4f6fa;
+}
+
+.nacos-page__item--active {
+  background: #eaf2ff;
+  box-shadow: inset 0 0 0 1px rgba(64, 144, 255, .28);
+}
+
+.nacos-page__item-main {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.nacos-page__item-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: #35405a;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.nacos-page__item-target {
+  font-size: 11.5px;
+  color: #98a2b3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.nacos-page__item-remove {
+  position: absolute;
+  top: 50%;
+  right: 6px;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: #a3adbd;
+  opacity: 0;
+  cursor: pointer;
+  transition: background .15s, color .15s, opacity .15s;
+}
+
+.nacos-page__sidebar-list li:hover .nacos-page__item-remove {
+  opacity: 1;
+}
+
+.nacos-page__item-remove:hover {
+  background: #fdeaea;
+  color: #e0544a;
+}
+
+.nacos-page__sidebar-hint {
+  padding: 6px 8px;
+  font-size: 12.5px;
+  line-height: 1.6;
+}
+
+.nacos-page__detail {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 14px 18px 18px;
+}
+
+.nacos-page__tabs {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+}
+
+.nacos-page__tabs-empty {
+  padding-left: 6px;
+  font-size: 12.5px;
+  color: #98a2b3;
+}
+
+.nacos-page__tab {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  max-width: 220px;
+  height: 32px;
+  border-radius: 9px;
+  background: #f1f3f8;
+  color: #55617a;
+  transition: background .15s, color .15s;
+}
+
+.nacos-page__tab:hover {
+  background: #e8ebf3;
+}
+
+.nacos-page__tab--active {
+  background: #e3f1ff;
+  color: #1a6fd6;
+  box-shadow: inset 0 0 0 1px rgba(64, 144, 255, .35);
+}
+
+.nacos-page__tab-label {
+  flex: 1 1 auto;
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  padding: 0 4px 0 12px;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font-size: 12.5px;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+}
+
+.nacos-page__tab-close {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  margin-right: 5px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: inherit;
+  opacity: .55;
+  cursor: pointer;
+  transition: background .15s, opacity .15s;
+}
+
+.nacos-page__tab-close:hover {
+  background: rgba(0, 0, 0, .06);
+  opacity: 1;
+}
+
+.nacos-page__add {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 9px;
+  background: linear-gradient(135deg, #4090ff, #1be1f7);
+  color: #fff;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(64, 144, 255, .24);
+  transition: filter .15s, transform .1s;
+}
+
+.nacos-page__add:hover {
+  filter: brightness(1.06);
+}
+
+.nacos-page__add:active {
+  transform: translateY(1px);
+}
+
+.nacos-page__hint {
+  margin: 0;
+  padding: 0 4px;
+  font-size: 12.5px;
+  color: #8b96a8;
+}
+
+.nacos-page__hint--error {
+  padding: 8px 12px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  background: #fff5f4;
+  color: #c0392b;
+}
+
+.nacos-page__empty {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.nacos-page__empty-mark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 4px;
+}
+
+.nacos-page__empty-title {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+  color: #35405a;
+}
+
+.nacos-page__empty-sub {
+  margin: 0;
+  max-width: 380px;
+  text-align: center;
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: #98a2b3;
+}
+
+.nacos-page__card {
+  flex: none;
+  padding: 14px 16px 16px;
+  margin-bottom: 12px;
+  border: 1px solid #eef1f6;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.nacos-page__card-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.nacos-page__card-title {
+  margin: 0;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #35405a;
+}
+
+.nacos-page__card-actions {
+  display: flex;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.nacos-page__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.nacos-page__field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.nacos-page__field--wide {
+  grid-column: 1 / -1;
+}
+
+.nacos-page__label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #6b7789;
+}
+
+.nacos-page__input {
+  width: 100%;
+  height: 36px;
+  padding: 0 12px;
+  border: 1px solid #e3e8f0;
+  border-radius: 9px;
+  background: #fff;
+  color: #16202f;
+  font-size: 13px;
+  outline: none;
+  transition: border-color .15s, box-shadow .15s;
+}
+
+.nacos-page__input:focus {
+  border-color: #8fb6ff;
+  box-shadow: 0 0 0 3px rgba(64, 144, 255, .14);
+}
+
+.nacos-page__field-note {
+  font-size: 11.5px;
+  color: #a3adbd;
+}
+
+.nacos-page__btn {
+  height: 32px;
+  padding: 0 14px;
+  border: 1px solid #e3e8f0;
+  border-radius: 9px;
+  background: #fff;
+  color: #55617a;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .15s, color .15s, border-color .15s;
+}
+
+.nacos-page__btn:hover:not(:disabled) {
+  border-color: #cfd8e5;
+  background: #f4f6fa;
+  color: #16202f;
+}
+
+.nacos-page__btn:disabled {
+  opacity: .6;
+  cursor: default;
+}
+
+.nacos-page__btn--primary {
+  border-color: transparent;
+  background: linear-gradient(135deg, #4090ff, #1be1f7);
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(64, 144, 255, .22);
+}
+
+.nacos-page__btn--primary:hover:not(:disabled) {
+  filter: brightness(1.06);
+  background: linear-gradient(135deg, #4090ff, #1be1f7);
+  color: #fff;
+}
+
+.nacos-page__console-empty {
+  flex: 1 1 auto;
+  min-height: 160px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: 1px dashed #dde3ec;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.nacos-page__console-empty-title {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: #7f8da4;
+}
+
+.nacos-page__console-empty-sub {
+  margin: 0;
+  font-size: 12px;
+  color: #a3adbd;
+}
+
+.nacos-page__console {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid #eef1f6;
+  border-radius: 12px;
+  background: #fff;
+}
+/* ---------------- Nacos: dark ---------------- */
+
+.workspace[data-theme='dark'] .nacos-page__sidebar {
+  border-right-color: #1a2230;
+  background: #0f151f;
+}
+
+.workspace[data-theme='dark'] .nacos-page__sidebar-title {
+  color: #7d8aa0;
+}
+
+.workspace[data-theme='dark'] .nacos-page__sidebar-count {
+  background: #1a2230;
+  color: #93a0b6;
+}
+
+.workspace[data-theme='dark'] .nacos-page__item:hover {
+  background: #1a2230;
+}
+
+.workspace[data-theme='dark'] .nacos-page__item--active {
+  background: #16283f;
+  box-shadow: inset 0 0 0 1px rgba(64, 144, 255, .38);
+}
+
+.workspace[data-theme='dark'] .nacos-page__item-name {
+  color: #cbd6e6;
+}
+
+.workspace[data-theme='dark'] .nacos-page__item-target {
+  color: #5f6b7f;
+}
+
+.workspace[data-theme='dark'] .nacos-page__item-remove {
+  color: #5f6b7f;
+}
+
+.workspace[data-theme='dark'] .nacos-page__item-remove:hover {
+  background: #3a1e1e;
+  color: #ff8a7a;
+}
+
+.workspace[data-theme='dark'] .nacos-page__tabs-empty {
+  color: #5f6b7f;
+}
+
+.workspace[data-theme='dark'] .nacos-page__tab {
+  background: #1a2230;
+  color: #93a0b6;
+}
+
+.workspace[data-theme='dark'] .nacos-page__tab:hover {
+  background: #202b3b;
+}
+
+.workspace[data-theme='dark'] .nacos-page__tab--active {
+  background: #16283f;
+  color: #6cb0ff;
+  box-shadow: inset 0 0 0 1px rgba(64, 144, 255, .4);
+}
+
+.workspace[data-theme='dark'] .nacos-page__tab-close:hover {
+  background: rgba(255, 255, 255, .08);
+}
+
+.workspace[data-theme='dark'] .nacos-page__hint {
+  color: #7d8aa0;
+}
+
+.workspace[data-theme='dark'] .nacos-page__hint--error {
+  background: #2a1a1a;
+  color: #ff8a7a;
+}
+
+.workspace[data-theme='dark'] .nacos-page__empty-title {
+  color: #93a0b6;
+}
+
+.workspace[data-theme='dark'] .nacos-page__empty-sub {
+  color: #5f6b7f;
+}
+
+.workspace[data-theme='dark'] .nacos-page__card {
+  border-color: #1a2230;
+  background: #131a25;
+}
+
+.workspace[data-theme='dark'] .nacos-page__card-title {
+  color: #cbd6e6;
+}
+
+.workspace[data-theme='dark'] .nacos-page__label {
+  color: #8b96a8;
+}
+
+.workspace[data-theme='dark'] .nacos-page__input {
+  border-color: #1f2a3a;
+  background: #0f151f;
+  color: #eef2f9;
+}
+
+.workspace[data-theme='dark'] .nacos-page__input:focus {
+  border-color: #33507f;
+}
+
+.workspace[data-theme='dark'] .nacos-page__field-note {
+  color: #5f6b7f;
+}
+
+.workspace[data-theme='dark'] .nacos-page__btn {
+  border-color: #1f2a3a;
+  background: #131a25;
+  color: #93a0b6;
+}
+
+.workspace[data-theme='dark'] .nacos-page__btn:hover:not(:disabled) {
+  border-color: #2a3a52;
+  background: #1a2230;
+  color: #eef2f9;
+}
+
+.workspace[data-theme='dark'] .nacos-page__console-empty {
+  border-color: #1f2a3a;
+  background: #131a25;
+}
+
+.workspace[data-theme='dark'] .nacos-page__console-empty-title {
+  color: #7d8aa0;
+}
+
+.workspace[data-theme='dark'] .nacos-page__console-empty-sub {
+  color: #5f6b7f;
+}
+
+.workspace[data-theme='dark'] .nacos-page__console {
+  border-color: #1a2230;
+  background: #0f151f;
+}
+/* The tab strip lives in the header now, so its tabs must not shrink or wrap. */
+.nacos-page__tabs > * {
+  flex: none;
+}
+
+.nacos-page__tabs::-webkit-scrollbar {
+  display: none;
+}
+
+/* The close button is pushed right by the tabs, which now take the free space. */
+.nacos-page__tabs-empty {
+  flex: 1 1 auto;
+  padding-left: 2px;
+}
+
+/* A dot marks a tab that shows a live page rather than an editable address. */
+.nacos-page__tab-dot {
+  flex: none;
+  width: 6px;
+  height: 6px;
+  margin-right: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: .7;
+}
+
+/* MySQL create-table SQL dialog */
+.mysql-page__create-overlay {
+  box-sizing: border-box;
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(15, 23, 42, .52);
+  backdrop-filter: blur(3px);
+  outline: none;
+}
+.mysql-page__create-overlay[data-closed] { display: none; }
+.mysql-page__create-dialog {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  width: min(640px, 100%);
+  max-height: min(760px, calc(100dvh - 40px));
+  overflow: hidden;
+  border: 1px solid #e1e7ef;
+  border-radius: 16px;
+  background: #fff;
+  color: #273244;
+  box-shadow: 0 24px 72px rgba(0, 0, 0, .25);
+}
+.mysql-page__create-header {
+  flex: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 22px 24px 16px;
+  border-bottom: 1px solid #edf0f4;
+}
+.mysql-page__create-header h3 { margin: 0; font-size: 18px; font-weight: 650; }
+.mysql-page__create-header p { margin: 6px 0 0; color: #788396; font-size: 12px; }
+.mysql-page__create-close {
+  width: 30px;
+  height: 30px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: #788396;
+  font-size: 24px;
+  cursor: pointer;
+}
+.mysql-page__create-close:hover:not(:disabled) { background: #f1f5f9; }
+.mysql-page__create-body { min-height: 0; overflow-y: auto; padding: 20px 24px; }
+.mysql-page__create-target {
+  margin-bottom: 18px;
+  padding: 10px 12px;
+  border-radius: 9px;
+  background: #eff8fa;
+  color: #54717d;
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+.mysql-page__create-target strong { color: #00758f; }
+.mysql-page__create-label { display: block; margin-bottom: 8px; font-size: 13px; font-weight: 600; }
+/* Frame around the SQL editor; CodeMirror inside is transparent and draws its own gutter. */
+.mysql-page__create-sql {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 230px;
+  overflow: hidden;
+  border: 1px solid #d7dee9;
+  border-radius: 10px;
+  background: #fbfcfe;
+  color: #243246;
+}
+.mysql-page__create-sql:focus-within { border-color: #0095ac; box-shadow: 0 0 0 3px rgba(0, 149, 172, .13); }
+.mysql-page__create-sql--disabled { opacity: .7; }
+.mysql-page__create-sql > .mysql-page__hint { margin: 0; padding: 14px 16px; }
+.mysql-page__create-tip { margin: 10px 0 0; color: #7c8799; font-size: 12px; }
+.mysql-page__create-error { margin: 12px 0 0; padding: 10px 12px; border-radius: 8px; background: #fff0f0; color: #c53333; font-size: 12px; overflow-wrap: anywhere; user-select: text; -webkit-user-select: text; cursor: text; }
+.mysql-page__create-footer { display: flex; flex: none; justify-content: flex-end; gap: 10px; padding: 16px 24px 20px; border-top: 1px solid #edf0f4; }
+.workspace[data-theme='dark'] .mysql-page__create-dialog { background: #202734; border-color: #384455; color: #edf3fa; }
+.workspace[data-theme='dark'] .mysql-page__create-header, .workspace[data-theme='dark'] .mysql-page__create-footer { border-color: #384455; }
+.workspace[data-theme='dark'] .mysql-page__create-header p, .workspace[data-theme='dark'] .mysql-page__create-tip { color: #9caabd; }
+.workspace[data-theme='dark'] .mysql-page__create-target { background: #163540; color: #a5bcca; }
+.workspace[data-theme='dark'] .mysql-page__create-target strong { color: #65d8ed; }
+.workspace[data-theme='dark'] .mysql-page__create-sql { background: #151d29; border-color: #405064; color: #e3ecf7; }
+.workspace[data-theme='dark'] .mysql-page__create-close { color: #bac6d6; }
+.workspace[data-theme='dark'] .mysql-page__create-close:hover:not(:disabled) { background: #364154; }
+.workspace[data-theme='dark'] .mysql-page__create-error { background: #49262b; color: #ffb5b5; }
+@media (max-width: 600px) {
+  .mysql-page__create-overlay { padding: 12px; }
+  .mysql-page__create-dialog { max-height: min(760px, calc(100dvh - 24px)); }
+  .mysql-page__create-header { padding: 18px 16px 14px; }
+  .mysql-page__create-body { padding: 16px; }
+  .mysql-page__create-footer { padding: 14px 16px; }
+}
+/* Table SQL execution panel */
+.mysql-page__sql-panel { margin: 16px 0 18px; padding: 18px; border: 1px solid #dce5ee; border-radius: 14px; background: #f8fafc; }
+.mysql-page__sql-panel-head { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-bottom: 12px; }
+.mysql-page__sql-panel-head > div { display: flex; align-items: baseline; flex-wrap: wrap; gap: 8px; }
+.mysql-page__sql-panel-head strong { font-size: 14px; color: #273549; }
+.mysql-page__sql-panel-head span, .mysql-page__sql-shortcut { font-size: 12px; color: #758399; }
+.mysql-page__sql-editor { display: block; box-sizing: border-box; width: 100%; min-height: 144px; padding: 13px 15px; resize: vertical; border: 1px solid #cfd9e5; border-radius: 10px; outline: none; background: #fff; color: #243246; font: 13px/1.7 Consolas, 'Courier New', monospace; tab-size: 2; }
+.mysql-page__sql-editor:focus { border-color: #0095ac; box-shadow: 0 0 0 3px rgba(0,149,172,.12); }
+.mysql-page__sql-actions { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-top: 12px; }
+.mysql-page__sql-actions > span { color: #758399; font-size: 12px; }
+.mysql-page__sql-output { margin-top: 16px; border-top: 1px solid #dce5ee; padding-top: 12px; }
+.mysql-page__sql-status { margin: 0 0 10px; color: #08765c; font-size: 13px; font-weight: 600; overflow-wrap: anywhere; }
+.mysql-page__sql-status--error { color: #c33a3a; }
+.mysql-page__sql-result-scroll { max-height: 290px; overflow: auto; border: 1px solid #dce5ee; border-radius: 9px; background: #fff; }
+.mysql-page__sql-notice { margin: 10px 0 0; color: #758399; font-size: 12px; }
+.workspace[data-theme='dark'] .mysql-page__sql-panel { background: #1c2633; border-color: #39495b; }
+.workspace[data-theme='dark'] .mysql-page__sql-panel-head strong { color: #edf3fb; }
+.workspace[data-theme='dark'] .mysql-page__sql-panel-head span, .workspace[data-theme='dark'] .mysql-page__sql-shortcut, .workspace[data-theme='dark'] .mysql-page__sql-actions > span, .workspace[data-theme='dark'] .mysql-page__sql-notice { color: #9dadbf; }
+.workspace[data-theme='dark'] .mysql-page__sql-editor { background: #131c29; border-color: #405165; color: #edf3fb; }
+.workspace[data-theme='dark'] .mysql-page__sql-output { border-color: #39495b; }
+.workspace[data-theme='dark'] .mysql-page__sql-result-scroll { background: #202a37; border-color: #39495b; }
+.workspace[data-theme='dark'] .mysql-page__sql-status { color: #69d6b0; }
+.workspace[data-theme='dark'] .mysql-page__sql-status--error { color: #ffa7a7; }
+@media (max-width: 600px) { .mysql-page__sql-panel { padding: 12px; } .mysql-page__sql-actions .mysql-page__btn { width: 100%; } }
+/* The command popover is positioned within the right sidebar's collision boundary. */
+.recent-command-picker {
+  position: static;
+  margin-top: 8px;
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  min-width: 0;
+  width: 100%;
+  max-width: 100%;
+  max-height: min(430px, 60vh);
+  overflow: hidden;
+  color: var(--text);
+  background: var(--surface, var(--bg, #202735));
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+.recent-command-picker__header {
+  display: flex;
+  flex: none;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 15px 11px;
+  border-bottom: 1px solid var(--border);
+}
+.recent-command-picker__header strong { font-size: 13px; }
+.recent-command-picker__header p,
+.recent-command-picker__foot {
+  margin: 5px 0 0;
+  font-size: 11px;
+  line-height: 1.5;
+  color: var(--recent-muted, #75859b);
+}
+.recent-command-picker__close {
+  flex: none;
+  width: 26px;
+  height: 26px;
+  border: 1px solid transparent;
+  border-radius: 7px;
+  background: transparent;
+  color: inherit;
+  font-size: 19px;
+  cursor: pointer;
+}
+.recent-command-picker__close:hover { background: rgba(127, 127, 127, 0.15); }
+.recent-command-picker button:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+.recent-command-picker__list {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  display: grid;
+  gap: 9px;
+  padding: 11px 12px;
+}
+.recent-command-picker__item {
+  min-width: 0;
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  background: rgba(127, 127, 127, 0.045);
+}
+.recent-command-picker__meta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  font-size: 11px;
+}
+.recent-command-picker__meta time { color: var(--recent-muted, #75859b); font-size: 10px; }
+.recent-command-picker__json {
+  max-height: 110px;
+  overflow: auto;
+  margin: 0 0 9px;
+  padding: 9px;
+  border-radius: 6px;
+  background: rgba(127, 127, 127, 0.1);
+  font: 11px/1.5 Consolas, monospace;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  user-select: text;
+}
+.recent-command-picker__send {
+  width: 100%;
+  min-height: 34px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  background: #647be2;
+  border-color: #647be2;
+  color: #fff;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+.recent-command-picker__send:hover:not(:disabled) {
+  background: #5169d1;
+  border-color: #5169d1;
+  color: #fff;
+}
+.recent-command-picker__send:disabled {
+  opacity: 1;
+  background: #e9edf5;
+  border-color: #d8e0ee;
+  color: #8795ab;
+  cursor: not-allowed;
+}
+.workspace[data-theme='dark'] .recent-command-picker__send:not(:disabled) {
+  background: #647be2;
+  border-color: #647be2;
+  color: #fff;
+}
+.workspace[data-theme='dark'] .recent-command-picker__send:disabled {
+  background: #303c50;
+  border-color: #435168;
+  color: #9caec7;
+}
+.recent-command-picker__empty,
+.recent-command-picker__error { margin: 12px; font-size: 12px; line-height: 1.6; }
+.recent-command-picker__error { color: var(--danger); }
+.recent-command-picker__foot {
+  flex: none;
+  margin: 0;
+  padding: 10px 13px;
+  border-top: 1px solid var(--border);
+}
+
+.workspace .recent-command-picker {
+  --app-popover-background: #ffffff;
+  background: #ffffff;
+  color: #24324a;
+  border-color: #dce5f1;
+  --recent-muted: #75859b;
+}
+.workspace[data-theme='dark'] .recent-command-picker {
+  --app-popover-background: #192331;
+  background: #192331;
+  color: #e7edf7;
+  border-color: #38485a;
+  --recent-muted: #aab7c7;
+}
+/* Completed tasks awaiting review in the session sidebar. */
+.workspace__session-unseen { display: inline-flex; align-items: center; padding: 1px 6px; border-radius: 999px; background: #e4f7ed; color: #087b53; font-size: 10px; font-weight: 700; line-height: 1.45; white-space: nowrap; vertical-align: baseline; }
+.workspace__session-unseen::before { content: ""; width: 5px; height: 5px; margin-right: 4px; border-radius: 50%; background: #12a66e; flex: none; }
+.workspace[data-theme=dark] .workspace__session-unseen { background: #173f34; color: #8be6b7; }
+.workspace[data-theme=dark] .workspace__session-unseen::before { background: #65dba5; }
+
+
+/* Chat-only product profile: retain the local conversation navigator and the native
+   ChatGPT page; remove terminal, device, task and multi-model chrome from the surface. */
+.workspace--chat-only .workspace__transferbar {
+  display: none !important;
+}
+
+.workspace--chat-only .workspace__content {
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  background: #fff;
+}
+
+.workspace--chat-only .workspace__titlebar {
+  min-height: 34px;
+}
+
+.app--chat-only {
+  grid-template-columns: minmax(0, 1fr) 0;
+  grid-template-rows: 46px minmax(0, 1fr) 0;
+  grid-template-areas:
+    'topbar topbar'
+    'stage panel'
+    'status status';
+  gap: 0 !important;
+  padding: 0 !important;
+  background: #fff !important;
+}
+
+.app--chat-only .topbar {
+  display: flex;
+  min-height: 46px;
+  padding: 5px 12px;
+  justify-content: flex-end;
+  gap: 0;
+  border: 0;
+  border-bottom: 1px solid #e7ebf1;
+  border-radius: 0;
+  background: #fff;
+  box-shadow: none;
+}
+
+.app--chat-only .brand,
+.app--chat-only .toolbar > button:not(.toolbar__settings),
+.app--chat-only .toolbar .address,
+.app--chat-only .toolbar .model-picker,
+.app--chat-only .toolbar .chat-view-switch,
+.app--chat-only .toolbar .remote-rg-retry,
+.app--chat-only .panel,
+.app--chat-only .statusbar {
+  display: none !important;
+}
+
+.app--chat-only .toolbar {
+  display: flex;
+  flex: 0 0 auto;
+  min-width: 0;
+  justify-content: flex-end;
+  gap: 0;
+}
+
+.app--chat-only .toolbar__settings {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border: 1px solid #e2e7ef;
+  border-radius: 9px;
+  background: #fff;
+  color: #58677d;
+  cursor: pointer;
+}
+
+.app--chat-only .toolbar__settings:hover {
+  background: #f5f7fa;
+  border-color: #cfd8e5;
+  color: #253b5a;
+}
+
+.app--chat-only .stage {
+  min-width: 0;
+  min-height: 0;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  border-radius: 0;
+  background: #fff;
+  box-shadow: none;
+}
+
+.app--chat-only .stage__slot {
+  border: 0;
+  border-radius: 0;
+  background: #fff;
+}
+
+.app--chat-only .stage__hint {
+  color: #718096;
+}
+
+.settings-chat-proxy {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 16px 12px;
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--bg-elevated);
+}
+
+.settings-chat-proxy__enabled {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.settings-chat-proxy__enabled input {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  accent-color: var(--accent);
+}
+
+.settings-chat-proxy__fields {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: minmax(130px, .8fr) minmax(180px, 1.5fr) minmax(100px, .6fr);
+  gap: 12px;
+}
+
+.settings-chat-proxy__fields label {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  min-width: 0;
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.settings-chat-proxy__fields .settings-theme-select,
+.settings-chat-proxy__fields .settings-input {
+  width: 100%;
+  min-width: 0;
+}
+
+.settings-chat-proxy > .settings-backend-hint,
+.settings-chat-proxy > .settings-feedback {
+  grid-column: 1 / -1;
+  margin: 0;
+}
+
+@media (max-width: 680px) {
+  .settings-chat-proxy__fields {
+    grid-template-columns: 1fr 1fr;
+  }
+  .settings-chat-proxy__fields label:first-child {
+    grid-column: 1 / -1;
+  }
+}
+
+.workspace--chat-only .workspace__titlebar-content > .workspace__release-notes-button { display: none !important; }

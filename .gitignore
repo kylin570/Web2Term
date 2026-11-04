@@ -37,3 +37,7 @@ Thumbs.db
 
 # Next.js marketing site output
 .next/
+
+# Account service local test cache and account databases
+account-server/__pycache__/
+account-server/*.sqlite3*
