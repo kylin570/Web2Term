@@ -133,9 +133,9 @@ export class DeviceAccountService {
       token.expiresAt = reply.expiresAt
       return this.publish('signed-in', token.username)
     } catch (error) {
-      if (error instanceof Error && ['SESSION_EXPIRED', 'INVALID_SIGNATURE'].includes(error.message)) {
+      if (error instanceof Error && ['SESSION_EXPIRED', 'INVALID_SIGNATURE', 'ACCOUNT_EXPIRED'].includes(error.message)) {
         this.token = null
-        return this.publish('signed-out', null, ACCOUNT_ERRORS.SESSION_EXPIRED)
+        return this.publish('signed-out', null, ACCOUNT_ERRORS[error.message] || ACCOUNT_ERRORS.SESSION_EXPIRED)
       }
       const code = error instanceof Error ? error.message : 'SERVER_UNREACHABLE'
       return this.publish('unavailable', null, ACCOUNT_ERRORS[code] || ACCOUNT_ERRORS.SERVER_UNREACHABLE)
