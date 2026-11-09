@@ -20,6 +20,7 @@ from collections import defaultdict, deque
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import urlsplit
+import admin_panel
 
 from cryptography.exceptions import InvalidSignature
 from cryptography.hazmat.primitives import serialization
@@ -28,7 +29,7 @@ from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PublicKey
 DB_PATH = Path(os.environ.get('ACCOUNT_DB', '/var/lib/web2term-account/accounts.sqlite3'))
 HOST = os.environ.get('ACCOUNT_HOST', '127.0.0.1')
 PORT = int(os.environ.get('ACCOUNT_PORT', '18791'))
-ALLOW_REGISTRATION = os.environ.get('ACCOUNT_ALLOW_REGISTRATION', '1') == '1'
+ALLOW_REGISTRATION = os.environ.get('ACCOUNT_ALLOW_REGISTRATION', '0') == '1'
 CHALLENGE_SECONDS = 90
 SESSION_SECONDS = 30 * 24 * 3600
 MAX_BYTES = 4096
@@ -107,6 +108,7 @@ def initialize():
             expires_at INTEGER NOT NULL
           );
         ''')
+        admin_panel.initialize(db)
     try:
         DB_PATH.chmod(0o600)
     except PermissionError:
@@ -166,12 +168,16 @@ class API(BaseHTTPRequestHandler):
             raise ValueError('BAD_REQUEST')
 
     def do_GET(self):
+        if admin_panel.handle_get(self, connection):
+            return
         if self.path == '/health':
             self.json(200, {'ok': True})
         else:
             self.fail(404, 'NOT_FOUND')
 
     def do_POST(self):
+        if admin_panel.handle_post(self, connection, password_digest, token_hash, rate_ok):
+            return
         path = urlsplit(self.path).path
         if path not in ('/v1/auth/challenge', '/v1/auth/register', '/v1/auth/login', '/v1/auth/session', '/v1/auth/logout'):
             return self.fail(404, 'NOT_FOUND')
@@ -257,6 +263,8 @@ class API(BaseHTTPRequestHandler):
                             db.execute('UPDATE users SET failed_attempts=?, locked_until=? WHERE id=?',
                                        (0 if lock else count, lock, user['id']))
                         failure = (401, 'INVALID_CREDENTIALS')
+                    elif user['expires_at'] is not None and user['expires_at'] <= now:
+                        failure = (403, 'ACCOUNT_EXPIRED')
                     elif user['device_public'] is not None and not hmac.compare_digest(user['device_public'], key):
                         failure = (403, 'DEVICE_BOUND')
                     else:
@@ -282,9 +290,11 @@ class API(BaseHTTPRequestHandler):
         if len(token) < 45 or not isinstance(issued, int) or abs(now - issued) > 120:
             return self.fail(401, 'SESSION_EXPIRED')
         with connection() as db:
-            row = db.execute('SELECT s.*,u.username,u.device_public,u.disabled FROM sessions s JOIN users u ON u.id=s.user_id WHERE s.token_hash=?', (token_hash(token),)).fetchone()
+            row = db.execute('SELECT s.*,u.username,u.device_public,u.disabled,u.expires_at AS account_expires_at FROM sessions s JOIN users u ON u.id=s.user_id WHERE s.token_hash=?', (token_hash(token),)).fetchone()
             if row is None or row['expires_at'] < now or row['disabled']:
                 return self.fail(401, 'SESSION_EXPIRED')
+            if row['account_expires_at'] is not None and row['account_expires_at'] <= now:
+                return self.fail(403, 'ACCOUNT_EXPIRED')
             path = '/v1/auth/logout' if logout else '/v1/auth/session'
             if not verified(row['device_public'], 'web2term-session-v1\n' + path + '\n' + str(issued) + '\n' + token, signature):
                 return self.fail(401, 'INVALID_SIGNATURE')
@@ -327,10 +337,21 @@ def main():
     sub = parser.add_subparsers(dest='command')
     sub.add_parser('serve')
     sub.add_parser('list')
+    bootstrap = sub.add_parser('admin-init')
+    bootstrap.add_argument('username')
+    bootstrap.add_argument('--password-stdin', action='store_true')
     for cmd in ('unbind', 'disable', 'enable', 'delete'):
         sub.add_parser(cmd).add_argument('username')
     args = parser.parse_args()
     initialize()
+    if args.command == 'admin-init':
+        if not args.password_stdin:
+            raise SystemExit('Use --password-stdin; never pass admin passwords as command arguments')
+        password = sys.stdin.readline().rstrip('\n')
+        with connection() as db:
+            admin_panel.bootstrap(db, password_digest, args.username, password)
+        print('Administrator initialized')
+        return
     if args.command not in (None, 'serve'):
         return admin_action(args)
     if HOST not in ('127.0.0.1', '::1'):
