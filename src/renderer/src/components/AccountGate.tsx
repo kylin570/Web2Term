@@ -39,8 +39,7 @@ export default function AccountGate({ state, retry }: { state: AccountState; ret
           <div className="account-gate__tabs" role="tablist" aria-label="登录方式">
             <button type="button" role="tab" aria-selected={view === 'login'} className={view === 'login' ? 'is-active' : ''}
               onClick={() => { setView('login'); setMessage('') }}>登录</button>
-            <button type="button" role="tab" aria-selected={view === 'register'} className={view === 'register' ? 'is-active' : ''}
-              onClick={() => { setView('register'); setMessage('') }}>注册</button>
+
           </div>
           <form onSubmit={event => void submit(event)} className="account-gate__form">
             <label htmlFor="account-username">用户名</label>
@@ -59,7 +58,7 @@ export default function AccountGate({ state, retry }: { state: AccountState; ret
                 type={showPassword ? 'text' : 'password'} placeholder="再次输入密码"
                 value={confirmation} onChange={event => setConfirmation(event.target.value)} />
             </> : null}
-            {state.status === 'unavailable' ? (
+            {state.status === 'unavailable' || (state.status === 'signed-out' && !!state.message) ? (
               <div role="alert" className="account-gate__error">
                 {state.message || '账号服务器暂时不可用。'}
                 <button type="button" disabled={busy} onClick={() => void retry()}>重新连接</button>
@@ -70,7 +69,7 @@ export default function AccountGate({ state, retry }: { state: AccountState; ret
               {busy ? '正在验证…' : view === 'register' ? '注册并绑定这台电脑' : '登录'}
             </button>
           </form>
-          <p className="account-gate__device-note">每个用户名只能绑定一台电脑。首次注册时自动绑定；换电脑需管理员解绑，同一电脑再次登录不需要重新绑定。</p>
+          <p className="account-gate__device-note">账号由管理员开通并设置到期时间。每个账号只能绑定一台电脑；到期后请联系管理员续费。</p>
           <p className="account-gate__footer">这是客户端账号，与 OpenAI / ChatGPT 账号独立。聊天网页仍需正常登录 OpenAI。</p>
         </>
       )}
