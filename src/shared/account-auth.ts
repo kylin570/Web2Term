@@ -16,6 +16,7 @@ export const ACCOUNT_ERRORS: Record<string, string> = {
   USERNAME_TAKEN: '这个用户名已被注册。',
   DEVICE_BOUND: '该账号已绑定另一台电脑。请联系管理员解绑后，在新电脑登录。',
   ACCOUNT_LOCKED: '密码连续错误次数过多，请 10 分钟后重试。',
+  ACCOUNT_EXPIRED: '账号已到期，请联系管理员续费。',
   CHALLENGE_EXPIRED: '登录校验已过期，请重试。',
   TOO_MANY_REQUESTS: '请求过于频繁，请稍后重试。',
   REGISTRATION_DISABLED: '注册入口已关闭，请联系管理员。',
